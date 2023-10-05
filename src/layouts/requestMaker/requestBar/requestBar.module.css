@@ -1,4 +1,37 @@
 .container {
   width: 100%;
   height: fit-content;
+  display: flex;
+}
+.input{
+  height: 30px;
+  width: 700px;
+  border: none;
+  background: transparent;
+  display: block;
+}
+.label input{
+  margin-left: 10px;
+  display: block;
+  border: none;
+  outline-color: blue;
+}
+.label{
+  display: flex;
+  border: solid 2px silver;
+  margin-left: 20px;
+  margin-top: 20px;
+  margin-bottom:10px;
+  border-radius: 4px;
+}
+
+.select{
+  height: 100%;
+  border: none;
+  text-align: center;
+  outline-color: blue;
+}
+
+label.focus{
+  border-color: blue;
 }
