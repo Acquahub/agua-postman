@@ -14,7 +14,7 @@ body,
 :root {
   --border-color: #ccc;
   --tab-height: 30px;
-  --primary-color: blue;
+  --primary-color: orange;
 }
 
 .containerLayout {

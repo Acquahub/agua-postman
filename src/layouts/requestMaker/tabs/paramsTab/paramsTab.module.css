@@ -9,16 +9,52 @@
   margin-top: 10px;
 }
 .divTable{
-  width: 80%;
+  width: 96%;
   height: 80%;
   margin-left: 30px;
 }
 p{
   margin-left: 12px;
   margin-top: 0;
+  font-size: 12px;
+  font-weight: 700;
 }
-.tabla{
+
+th{
+  text-align: start;
+  border: 1px solid gray;
+}
+/* Estilo para la tabla */
+.tabla {
+  border-collapse: collapse; /* Combina los bordes de las celdas */
+  width: 100%; /* Ajusta el ancho de la tabla según tus necesidades */
+  border: 1px solid #ccc;
+  width: 100%;
   margin-left: 0;
   padding: 0;
   text-align: start;
 }
+
+/* Estilo para las celdas de la tabla */
+.tabla th,
+.tabla td {
+  border: 1px solid #ccc; /* Agrega un borde de 1 píxel sólido de color negro */
+  padding: 4px; /* Ajusta el espaciado interno de las celdas según tus necesidades */
+}
+.editable-input {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  width: 100%;
+}
+
+.input-wrapper {
+  border: none;
+  padding: 2px;
+  transition: border 0.3s; /* Agregar una transición para suavizar el cambio de borde */
+}
+
+.input-wrapper:focus-within {
+  border: 1px solid #ccc; /* Cambiar el borde cuando el input o su contenido están enfocados */
+}
+

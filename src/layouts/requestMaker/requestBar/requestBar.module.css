@@ -4,34 +4,57 @@
   display: flex;
 }
 .input{
-  height: 30px;
-  width: 700px;
+  height: 35px;
+
+  width: 900px;
   border: none;
   background: transparent;
   display: block;
 }
 .label input{
-  margin-left: 10px;
+
   display: block;
   border: none;
   outline-color: blue;
 }
 .label{
   display: flex;
-  border: solid 2px silver;
+  border: solid 1px silver;
   margin-left: 20px;
   margin-top: 20px;
-  margin-bottom:10px;
-  border-radius: 4px;
+  border-radius: 1px;
 }
 
 .select{
   height: 100%;
+  width: 120px;
   border: none;
-  text-align: center;
+  text-align: start;
   outline-color: blue;
+  font-size: 15px;
+  font-weight: 700;
 }
+
+.select option{
+  color: blue;
+  margin-top: 20px;
+  height: 100px;
+  margin-bottom: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+}
+
+
 
 label.focus{
   border-color: blue;
+}
+
+.option{
+  width: 300px;
+  height: 300px;
+}
+.borde{
+  border: none;
 }

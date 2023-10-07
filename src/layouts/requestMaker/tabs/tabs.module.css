@@ -17,12 +17,12 @@
 }
 
 .tabItem {
-  margin-left: 48px;
+  margin-left: 20px;
   height: var(--tab-height);
   line-height: var(--tab-height);
   cursor: pointer;
 }
 
 .activeTabItem {
-  border-bottom: 1px solid var(--primary-color);
+  border-bottom: 2px solid var(--primary-color);
 }
