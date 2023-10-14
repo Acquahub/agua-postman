@@ -1,38 +1,45 @@
 .container {
   width: 100%;
   height: fit-content;
-  display: flex;
+  display: flex-wrap;
+  margin: 1px;
+  padding: 2px;
 }
 .input{
   height: 35px;
 
-  width: 900px;
+  width: 100%;
   border: none;
   background: transparent;
   display: block;
 }
 .label input{
-
-  display: block;
   border: none;
-  outline-color: blue;
+  outline-color: transparent;
+  margin: 2px;
+  margin-right: 8px;
+  padding-left: 8px;
+  padding-right: 16px;
 }
 .label{
   display: flex;
+  
   border: solid 1px silver;
-  margin-left: 20px;
-  margin-top: 20px;
-  border-radius: 1px;
+  margin: 20px;
+  border-radius: 5px;
+  padding: 4px;
 }
 
 .select{
   height: 100%;
-  width: 120px;
+  width: 130px;
   border: none;
   text-align: start;
   outline-color: blue;
   font-size: 15px;
   font-weight: 700;
+  margin: 1px;
+  margin-right: 5px;
 }
 
 .select option{

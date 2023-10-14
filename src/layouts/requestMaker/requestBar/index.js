@@ -16,15 +16,16 @@ export default function RequestBar({ userInputCallback }) {
   }
 
   const options = [
-    { value: "Get", label: "Get", color: "green" },
-    { value: "Send", label: "Send", color: "blue" },
-    { value: "Push", label: "Push", color: "red" },
-    { value: "Delete", label: "Delete", color: "purple" },
+    { value: "GET",    label: "GET",    color: "green" },
+    { value: "POST",   label: "POST",   color: "blue" },
+    { value: "PUT",    label: "PUT",    color: "red" },
+    { value: "DELETE", label: "DELETE", color: "purple" },
+    { value: "PATCH",  label: "PATCH",  color: "orange" },
   ];
 
   const customStyles = {
     option: (provided, state) => ({
-      ...provided,
+      ...provided,  
       color: state.data.color,
       border: "none",
     }),
@@ -40,28 +41,30 @@ export default function RequestBar({ userInputCallback }) {
 
   return (
     <div className={styles['container']}>
+
+      { /* ¿Por qué todo dentro de una label? */ }
       <label className={styles['label']}>
-        <div>
-          <Select
+        <Select
             className={styles['select']}
             options={options}
             value={selectedOption}
             onChange={handleSelectChange}
             styles={customStyles}
             getOptionLabel={getOptionLabel}
-            placeholder="Get"
+            placeholder={options[0].label}
           />
-        </div>
-        <div>
-          <input
+        <input
             className={styles['input']}
             type="text"
             value={inputValue}
             onChange={handleInputChange}
             placeholder="Ingresa la URL aquí"
           />
-        </div>
       </label>
+      
+      <button type="button">
+        Send
+      </button>
     </div>
   );
 }
