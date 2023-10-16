@@ -1,3 +1,6 @@
+import "bootstrap/dist/css/bootstrap.min.css"
+import "bootstrap/dist/js/bootstrap.min.js"
+
 import React, { useState } from "react";
 import styles from "./requestBar.module.css";
 import Select from "react-select";
@@ -40,7 +43,7 @@ export default function RequestBar({ userInputCallback }) {
   );
 
   return (
-    <div className={styles['container']}>
+    <div className={styles['container-fluid d-flex']}>
 
       { /* ¿Por qué todo dentro de una label? */ }
       <label className={styles['label']}>
@@ -60,11 +63,13 @@ export default function RequestBar({ userInputCallback }) {
             onChange={handleInputChange}
             placeholder="Ingresa la URL aquí"
           />
+
+        <button type="button" className="btn btn-primary px-4">
+          Send
+        </button>
       </label>
       
-      <button type="button">
-        Send
-      </button>
+      
     </div>
   );
 }
