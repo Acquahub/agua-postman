@@ -61,7 +61,7 @@ export default function RequestBar({ userInputCallback }) {
             type="text"
             value={inputValue}
             onChange={handleInputChange}
-            placeholder="Ingresa la URL aquí"
+            placeholder="Enter or paste URL here"
           />
 
         <button type="button" className="btn btn-primary px-4">
