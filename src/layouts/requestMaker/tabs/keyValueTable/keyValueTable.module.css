@@ -1,8 +1,8 @@
 .divTable{
   height: 100%;
+  margin: 1rem;
 }
 p{
-  margin-left: 0.3rem;
   margin-top: 0;
   font-size: 12px;
   font-weight: 700;
@@ -20,7 +20,7 @@ th{
   width: 100%;
   margin-left: 0;
   padding: 0;
-  text-align: start;
+  text-align: center;
 }
 
 /* Estilo para las celdas de la tabla */
@@ -39,10 +39,9 @@ th{
 .input-wrapper {
   border: none;
   padding: 2px;
-  transition: border 0.3s; /* Agregar una transición para suavizar el cambio de borde */
+  transition: border 0.3s;  /* Agregar una transición para suavizar el cambio de borde */
 }
 
 .input-wrapper:focus-within {
   border: 1px solid #ccc; /* Cambiar el borde cuando el input o su contenido están enfocados */
 }
-

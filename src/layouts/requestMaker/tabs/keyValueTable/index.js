@@ -1,5 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap/dist/js/bootstrap.min.js"
+import "bootstrap-icons/font/bootstrap-icons.css"
 
 import styles from "./keyValueTable.module.css";
 import { useState } from "react";
@@ -36,55 +37,57 @@ export default function KeyValueTable() {
 
   return (
     <div className={styles['divTable']}>
-        <table className={styles['tabla']}>
-          <thead>
-            <tr>
-              <th></th>
-              <th>Key</th>
-              <th>Value</th>
-              <th>Description</th>
-              <th></th>
+      <table className={styles['tabla']}>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Key</th>
+            <th>Value</th>
+            <th>Description</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, index) => (
+            <tr key={index}>
+              <td><input class="form-check-input" type="checkbox" value=""/></td>
+              <td>
+                <div className={styles['input-wrapper']}>
+                  <input
+                    className={styles['editable-input']}
+                    placeholder="Key"
+                    value={row.key}
+                    onInput={(e) => handleInputChange(index, e, "key")}
+                  />
+                </div>
+              </td>
+              <td>
+                <div className={styles['input-wrapper']}>
+                  <input
+                    className={styles['editable-input']}
+                    placeholder="Value"
+                    value={row.value}
+                    onInput={(e) => handleInputChange(index, e, "value")}
+                  />
+                </div>
+              </td>
+              <td>
+                <div className={styles['input-wrapper']}>
+                  <input
+                    className={styles['editable-input']}
+                    placeholder="Description"
+                    value={row.description}
+                    onInput={(e) => handleInputChange(index, e, "description")}
+                  />
+                </div>
+              </td>
+              <td> 
+                <button type="button" className="btn btn-close" aria-label="Close" onClick={() => handleBulkEdit(index)} ></button>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {rows.map((row, index) => (
-              <tr key={index}>
-                <td><input type="checkbox" /></td>
-                <td>
-                  <div className={styles['input-wrapper']}>
-                    <input
-                      className={styles['editable-input']}
-                      placeholder="Key"
-                      value={row.key}
-                      onInput={(e) => handleInputChange(index, e, "key")}
-                    />
-                  </div>
-                </td>
-                <td>
-                  <div className={styles['input-wrapper']}>
-                    <input
-                      className={styles['editable-input']}
-                      placeholder="Value"
-                      value={row.value}
-                      onInput={(e) => handleInputChange(index, e, "value")}
-                    />
-                  </div>
-                </td>
-                <td>
-                  <div className={styles['input-wrapper']}>
-                    <input
-                      className={styles['editable-input']}
-                      placeholder="Description"
-                      value={row.description}
-                      onInput={(e) => handleInputChange(index, e, "description")}
-                    />
-                  </div>
-                </td>
-                <td><button onClick={() => handleBulkEdit(index)}>X</button></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
