@@ -69,7 +69,6 @@ export default function RequestBar({ userInputCallback }) {
         </button>
       </label>
       
-      
     </div>
   );
 }
