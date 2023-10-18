@@ -40,7 +40,7 @@ export default function ParamsTab() {
           <thead>
             <tr>
               <th></th>
-              <th>Key</th>
+              <th style={{ color: "var(--testing)" }}>Key</th>
               <th> Value</th>
               <th>Description</th>
               <th> Bulk Edit</th>

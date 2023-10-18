@@ -15,8 +15,8 @@ export default function RequestTitle({ userInput }) {
           <option>Socket.IO</option>
           <option>MQTT</option>
         </select>
-        <div className={styles['titulo']}>
-         {userInput ? userInput : "Untitled Request"}
+        <div className={styles['titulo']} style={{ color: "var(--testing)" }}>
+          {userInput ? userInput : "Untitled Request"}
         </div>
       </label>
     </div>
