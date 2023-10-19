@@ -21,13 +21,6 @@ export default function BodyTab() {
       <span className="d-flex gap-2">
         <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
         <label className="form-check-label" for="flexRadioDefault1">
-          form-data
-        </label>
-      </span>
-
-      <span className="d-flex gap-2">
-        <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
-        <label className="form-check-label" for="flexRadioDefault1">
           raw
         </label>
       </span>

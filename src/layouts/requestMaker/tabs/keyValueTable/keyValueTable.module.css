@@ -10,13 +10,13 @@ p{
 
 th{
   text-align: start;
-  border: 1px solid gray;
+  border: 1px solid var(--border-color);
 }
 /* Estilo para la tabla */
 .tabla {
   border-collapse: collapse; /* Combina los bordes de las celdas */
   width: 100%; /* Ajusta el ancho de la tabla según tus necesidades */
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   width: 100%;
   margin-left: 0;
   padding: 0;
@@ -26,7 +26,7 @@ th{
 /* Estilo para las celdas de la tabla */
 .tabla th,
 .tabla td {
-  border: 1px solid #ccc; /* Agrega un borde de 1 píxel sólido de color negro */
+  border: 1px solid var(--border-color); /* Agrega un borde de 1 píxel sólido de color negro */
   padding: 4px; /* Ajusta el espaciado interno de las celdas según tus necesidades */
 }
 .editable-input {
@@ -34,6 +34,7 @@ th{
   outline: none;
   background-color: transparent;
   width: 100%;
+  color: var(--main-text-color);
 }
 
 .input-wrapper {
@@ -43,5 +44,5 @@ th{
 }
 
 .input-wrapper:focus-within {
-  border: 1px solid #ccc; /* Cambiar el borde cuando el input o su contenido están enfocados */
+  border: 1px solid var(--border-color); /* Cambiar el borde cuando el input o su contenido están enfocados */
 }

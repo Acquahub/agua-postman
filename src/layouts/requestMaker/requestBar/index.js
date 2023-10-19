@@ -27,6 +27,7 @@ export default function RequestBar({ userInputCallback }) {
   ];
 
   const customStyles = {
+    control: provided => ({...provided, backgroundColor: 'var(--bg-color)', borderColor: 'var(--border-color)'}),
     option: (provided, state) => ({
       ...provided,  
       color: state.data.color,
@@ -44,6 +45,7 @@ export default function RequestBar({ userInputCallback }) {
 
   return (
     <div className={styles['container-fluid d-flex']}>
+
 
       <label className={styles['label']}>
         <Select

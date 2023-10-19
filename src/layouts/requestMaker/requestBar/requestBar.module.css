@@ -1,9 +1,9 @@
 .input{
   height: 35px;
-
   width: 100%;
   border: none;
-  background: transparent;
+  color: var(--main-text-color);
+  background: none;
   display: block;
 }
 .label input{
@@ -28,8 +28,7 @@
   border: none;
   text-align: start;
   outline-color: blue;
-  font-size: 15px;
-  font-weight: 700;
+  font-weight: bolder;
   margin: 1px;
   margin-right: 5px;
 }

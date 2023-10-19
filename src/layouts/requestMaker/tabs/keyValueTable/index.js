@@ -81,7 +81,7 @@ export default function KeyValueTable() {
                   />
                 </div>
               </td>
-              <td> 
+              <td data-bs-theme="dark"> 
                 <button type="button" className="btn btn-close" aria-label="Close" onClick={() => handleBulkEdit(index)} ></button>
               </td>
             </tr>

@@ -24,5 +24,6 @@
 }
 
 .activeTabItem {
-  border-bottom: 2px solid var(--primary-color);
+  border-bottom: 2px solid var(--accent-color);
+  color: var(--main-text-color);
 }

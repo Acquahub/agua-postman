@@ -4,7 +4,6 @@ import Tabs from "./tabs";
 import HeadersTab from "./tabs/headersTab";
 import ParamsTab from "./tabs/paramsTab";
 import BodyTab from "./tabs/bodyTab";
-import AuthorizationTab from "./tabs/authorizationTab"
 
 import RequestTitle from "../../components/requestMaker/requestTitle";
 import RequestBar from "./requestBar";
@@ -15,10 +14,6 @@ const tabs = [
   {
     name: 'Params',
     element: <ParamsTab />
-  },
-  {
-    name: 'Authorization',
-    element: <AuthorizationTab />
   },
   {
     name: 'Headers',

@@ -3,10 +3,6 @@ import styles from "./requestTitle.module.css";
 
 export default function RequestTitle({ userInput }) {
 
-  const getOptionLabel = (option) => (
-    <div style={{ color: option.color }}>{option.label}</div>
-  );
-
   return (
     <div className={styles['title']}>
       <label className={styles['label']}> 
