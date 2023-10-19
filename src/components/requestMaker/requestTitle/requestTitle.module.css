@@ -1,5 +1,5 @@
 .title {
-  color: #222;
+  color: var(--main-text-color);
   margin-left: 10px;
   display: flex;
   font-weight: 700;
@@ -19,4 +19,8 @@
 .titulo{
   margin-left: 5px;
   margin-top: 3px;
+}
+.http-icon{
+  width: 30px;
+  height: 100%;
 }
