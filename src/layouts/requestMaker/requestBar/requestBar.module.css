@@ -16,7 +16,7 @@
 }
 .label{
   display: flex;
-  border: solid 1px silver;
+  border: solid 1px var(--border-color);
   margin: 20px;
   border-radius: 5px;
   padding: 4px;

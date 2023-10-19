@@ -45,7 +45,6 @@ export default function RequestBar({ userInputCallback }) {
   return (
     <div className={styles['container-fluid d-flex']}>
 
-      { /* ¿Por qué todo dentro de una label? */ }
       <label className={styles['label']}>
         <Select
             className={styles['select']}

@@ -1,20 +1,23 @@
 html,
 body,
 #root {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  height: 100%;
-  width: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans",
-    Helvetica, Roboto, Oxygen, Arial, "Apple Color Emoji", "Segoe UI Emoji",
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  background-color: var(--bg-color);
+  font-family: var(--fonts);
 }
 
 :root {
-  --border-color: #ccc;
+  --bg-color: #212121;
+  --border-color: #6b6b6b;
+  --main-text-color: #f8ffea;
+  --secondary-text-color: #6b6b6b;
+  --main-button-color: #097bed;
+  --secondary-button-color: #3b3b3b;
+  --accent-color: #ff6c37;
+  --fonts: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans",
+  Helvetica, Roboto, Oxygen, Arial, "Apple Color Emoji", "Segoe UI Emoji",
+  Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+
   --tab-height: 30px;
-  --primary-color: orange;
 }
 
 .containerLayout {
