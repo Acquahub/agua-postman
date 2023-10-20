@@ -9,6 +9,7 @@
 .label input{
   border: none;
   outline-color: transparent;
+  outline: none;
   margin: 2px;
   margin-right: 8px;
   padding-left: 8px;

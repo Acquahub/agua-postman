@@ -27,16 +27,31 @@ export default function RequestBar({ userInputCallback }) {
   ];
 
   const customStyles = {
-    control: provided => ({...provided, backgroundColor: 'var(--bg-color)', borderColor: 'var(--border-color)'}),
+    control: provided => ({
+      ...provided, 
+      background: 'var(--bg-color)', 
+      border: 'none',
+      outline: 'none',
+      borderColor: 'var(--border-color)'}),
     option: (provided, state) => ({
       ...provided,  
       color: state.data.color,
       border: "none",
+      
     }),
     dropdownIndicator: (provided) => ({
       ...provided,
      
     }),
+    indicatorSeparator: (provided) => ({
+      ...provided,
+      background: 'transparent',
+      outline: 'none'
+    }),
+    menu: (provided) => ({
+      ...provided,
+      background: 'var(--bg-color)'
+    })
   };
 
   const getOptionLabel = (option) => (

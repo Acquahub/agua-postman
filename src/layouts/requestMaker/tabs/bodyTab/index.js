@@ -3,11 +3,6 @@ import styles from "./bodyTab.module.css";
 import KeyValueTable from "../keyValueTable"
 
 export default function BodyTab() {
-  const [selectedOption, setSelectedOption] = useState(null);
-
-  // const handleSelection = () => {
-  //   selectedOption
-  // }
   
   return (
     <div className="container-fluid m-3 d-flex gap-4">

@@ -26,7 +26,7 @@ th{
 /* Estilo para las celdas de la tabla */
 .tabla th,
 .tabla td {
-  border: 1px solid var(--border-color); /* Agrega un borde de 1 píxel sólido de color negro */
+  border: 1px solid var(--tb-border-color); /* Agrega un borde de 1 píxel sólido de color negro */
   padding: 4px; /* Ajusta el espaciado interno de las celdas según tus necesidades */
 }
 .editable-input {
