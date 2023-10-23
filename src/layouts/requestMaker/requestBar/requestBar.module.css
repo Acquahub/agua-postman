@@ -8,6 +8,7 @@
 }
 .label input{
   border: none;
+  /* border-left: solid var(--border-color); */
   outline-color: transparent;
   outline: none;
   margin: 2px;
@@ -17,8 +18,10 @@
 }
 .label{
   display: flex;
+  width: 90%;
   border: solid 1px var(--border-color);
   margin: 20px;
+  margin-right: 10px;
   border-radius: 5px;
   padding: 4px;
 }
@@ -42,6 +45,10 @@
   font-size: 15px;
   font-weight: 700;
   border: none;
+}
+
+.select option:hover{
+  background-color: var(--bg-color);
 }
 
 

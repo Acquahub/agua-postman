@@ -32,16 +32,14 @@ export default function RequestBar({ userInputCallback }) {
       background: 'var(--bg-color)', 
       border: 'none',
       outline: 'none',
+      cursor: 'pointer',
       borderColor: 'var(--border-color)'}),
     option: (provided, state) => ({
       ...provided,  
       color: state.data.color,
+      backgroundColor: state.isFocused ? 'var(--secondary-button-color)' : 'var(--bg-color)',
       border: "none",
-      
-    }),
-    dropdownIndicator: (provided) => ({
-      ...provided,
-     
+      cursor: 'pointer'
     }),
     indicatorSeparator: (provided) => ({
       ...provided,
@@ -59,8 +57,7 @@ export default function RequestBar({ userInputCallback }) {
   );
 
   return (
-    <div className={styles['container-fluid d-flex']}>
-
+    <div className="container-fluid d-flex align-items-center">
 
       <label className={styles['label']}>
         <Select
@@ -72,6 +69,7 @@ export default function RequestBar({ userInputCallback }) {
             getOptionLabel={getOptionLabel}
             placeholder={options[0].label}
           />
+        <hr className={styles['input-separator']}></hr>
         <input
             className={styles['input']}
             type="text"
@@ -80,10 +78,14 @@ export default function RequestBar({ userInputCallback }) {
             placeholder="Enter or paste URL here"
           />
 
-        <button type="button" className="btn btn-primary px-4">
-          Send
-        </button>
+        
       </label>
+      <span>
+        <button type="button" style={{ fontSize: '14px', fontWeight: 'bold' }} className="btn btn-primary px-5 py-3 send-button">
+            Send
+        </button>
+      </span>
+      
       
     </div>
   );
