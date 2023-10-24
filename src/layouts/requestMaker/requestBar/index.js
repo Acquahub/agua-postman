@@ -69,7 +69,7 @@ export default function RequestBar({ userInputCallback }) {
             getOptionLabel={getOptionLabel}
             placeholder={options[0].label}
           />
-        <hr className={styles['input-separator']}></hr>
+
         <input
             className={styles['input']}
             type="text"
@@ -78,10 +78,9 @@ export default function RequestBar({ userInputCallback }) {
             placeholder="Enter or paste URL here"
           />
 
-        
       </label>
       <span>
-        <button type="button" style={{ fontSize: '14px', fontWeight: 'bold' }} className="btn btn-primary px-5 py-3 send-button">
+        <button type="button" style={{ fontSize: '13px', fontWeight: 'bold' }} className="btn btn-primary px-5 py-3">
             Send
         </button>
       </span>

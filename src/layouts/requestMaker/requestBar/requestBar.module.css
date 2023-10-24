@@ -8,7 +8,7 @@
 }
 .label input{
   border: none;
-  /* border-left: solid var(--border-color); */
+  border-left: solid 1px var(--border-color);
   outline-color: transparent;
   outline: none;
   margin: 2px;
@@ -23,7 +23,7 @@
   margin: 20px;
   margin-right: 10px;
   border-radius: 5px;
-  padding: 4px;
+  padding: 2px;
 }
 
 .select{
@@ -64,3 +64,4 @@ label.focus{
 .borde{
   border: none;
 }
+
