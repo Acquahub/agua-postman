@@ -9,12 +9,14 @@ body,
 
 :root {
   --bg-color: #212121;
+  --secondary-bg-color: #262626;
   --border-color: #6b6b6b;
   --tb-border-color: #3b3b3b;
   --main-text-color: #f8ffea;
   --secondary-text-color: #8b8b8b;
   --main-button-color: #097bed;
   --secondary-button-color: #3b3b3b;
+  --hover-color: #3b3b3b;
   --accent-color: #ff6c37;
   --font-size: small;
   --fonts: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans",
@@ -41,4 +43,13 @@ body,
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+aside {
+  background-color: var(--secondary-bg-color);
+  border: var(--border-color);
+  width: 250px;
+  min-width: 125px;
+  resize: horizontal;
+  overflow: auto;
 }

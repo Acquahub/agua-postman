@@ -1,0 +1,59 @@
+
+.list-group-item {
+background-color: transparent !important;
+border: none;
+}
+
+.list-group-item:hover {
+background-color: #34495e; 
+}
+
+.add-button {
+    background: none; 
+    border: none;
+    color: var(--main-text-color);
+    font-weight: bold;
+    font-size: medium;
+    border-radius: 2px;
+}
+
+.add-button:hover {
+background-color: var(--hover-color);
+}
+
+.add-button::before {
+content: "+";
+}
+
+.add-button::before,
+.add-button:focus {
+outline: none;
+}
+
+.add-icon {
+font-size: 1.2rem;
+}
+
+.search-bar {
+    border: solid 1px var(--tb-border-color);
+    background-color: transparent;
+    color: var(--main-text-color);
+    border-radius: 2px;
+    margin-left: 3px;
+    margin-right: 3px;
+    outline: none;
+    padding-left: 8px;
+}
+
+.search-bar:hover {
+    background-color: var(--hover-color);
+}
+
+.collection a {
+    text-decoration: none;
+    color: var(--secondary-text-color);
+}
+
+.collection a:hover {
+    color: var(--main-text-color);
+} 
