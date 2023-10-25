@@ -5,15 +5,9 @@ import { useState } from "react";
 
 export default function Sidebar({ isOpen, toggleSidebar }) {
     const [collections, setCollections] = useState([]);
-    // const [isOpen, setIsOpen] = useState(false);
-
-    // const toggleSidebar = () => {
-    //     setIsOpen(!isOpen);
-    //     console.log(isOpen)
-    // }
 
     const handleAdd = () => {
-        const newCollection = { id: collections.length + 1, name: 'New Collection' };
+        const newCollection = { id: collections.length + 1, name: 'New Collection', requests: [] };
         setCollections([...collections, newCollection]);
     }
 
@@ -37,9 +31,26 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                 <div className={`flex-grow-1 overflow-auto ${isOpen ? '' : 'd-none'}`}>
                     <ul className="">
                         {collections.map(collection => (
-                            <li key={collection.id} className={styles['collection']}>
-                                <a href="#">{collection.name}</a>
-                            </li>
+                            // <li key={collection.id} className={styles['collection']}>
+                            //     <a href="#">{collection.name}</a>
+                            // </li>
+
+                            <div key={collection.id} className={styles['collection']}>
+                                <div className={`accordion accordion-dark ${styles['accordion-custom']}`} id={`accordion-${collection.id}`}>
+                                    <div className={`accordion-item `}>
+                                        <h2 className="accordion-header">
+                                            <button className={`accordion-button ${styles['accordion-button-custom']}`} type="button" data-bs-toggle="collapse" data-bs-target={`#collapse-${collection.id}`}>
+                                                {collection.name}
+                                            </button>
+                                        </h2>
+                                        <div id={`collapse-${collection.id}`} className="accordion-collapse collapse">
+                                            <div className="accordion-body">
+                                                Contenido del acordeón aquí...
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         ))}
                     </ul>
                 </div>

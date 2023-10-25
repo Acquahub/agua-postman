@@ -49,14 +49,33 @@ font-size: 1.2rem;
     background-color: var(--hover-color);
 }
 
-.collection a {
-    text-decoration: none;
-    color: var(--secondary-text-color);
+.collection {
+    background-color: transparent;
+    
 }
 
-.collection a:hover {
+.collection:hover {
     color: var(--main-text-color);
 } 
+
+.accordion-custom {
+    border: none;
+    outline: none;
+}
+
+.accordion-button-custom {
+    background-color: var(--secondary-bg-color);
+    color: var(--secondary-text-color);
+    border: none;
+    outline: none;
+}
+
+.accordion-button-custom:hover {
+    background-color: var(--hover-color);
+    color: var(--main-text-color);
+    border: none;
+    outline: none;
+}
 
 i {
     width: 80px;
