@@ -3,13 +3,18 @@ import RequestMaker from './layouts/requestMaker';
 import Nav from './layouts/nav';
 import Response from './layouts/response';
 import Sidebar from './layouts/sidebar';
+import { useState } from "react";
 
 function App() {
+  const [isOpen, setIsOpen] = useState(true);
+
+    const toggleSidebar = () => {
+      setIsOpen(!isOpen);
+    }
+
   return (
-    <div className="containerLayout">
-      <aside className='vh-100 px-3'>
-        <Sidebar />
-      </aside>
+    <div className={`${isOpen ? 'containerLayout-packed' : 'containerLayout-expanded'}`}>
+      <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
 
       <div className="containerMainView">
           <Nav />

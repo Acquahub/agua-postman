@@ -22,34 +22,28 @@ body,
   --fonts: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans",
   Helvetica, Roboto, Oxygen, Arial, "Apple Color Emoji", "Segoe UI Emoji",
   Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  --sidebar-closed-width: 60px;
+  --sidebar-open-width: 260px;
 
   --tab-height: 30px;
 }
 
-.containerLayout {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  width: 100%;
+.containerLayout-expanded {
+  margin-left: var(--sidebar-closed-width);
+  width: calc(100% - var(--sidebar-closed-width));
   height: 100%;
   display: flex;
 }
 
+.containerLayout-packed {
+  margin-left: var(--sidebar-open-width);
+  width: calc(100% - var(--sidebar-open-width));
+}
+
 .containerMainView {
-  margin: 0;
-  padding: 0;
   overflow: hidden;
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-}
-
-aside {
-  background-color: var(--secondary-bg-color);
-  border: var(--border-color);
-  width: 250px;
-  min-width: 125px;
-  resize: horizontal;
-  overflow: auto;
 }
