@@ -1,0 +1,22 @@
+.wrapper {
+    width: 200px;
+    background-color: var(--bg-color);
+    border-radius: 10px;
+}
+
+.wrapper .menu {
+    padding: 10px 12px;
+}
+
+.content .item {
+    list-style: none;
+    border-radius: 3px;
+    padding: 5px;
+    padding-left: 20px;
+    color: var(--main-text-color);
+}
+
+.item:hover {
+    background-color: var(--hover-color);
+    cursor: pointer;
+}

@@ -2,6 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap/dist/js/bootstrap.min.js"
 import styles from "./sidebar.module.css";
 import { useState } from "react";
+import ContextMenu from "../contextMenu";
 
 export default function Sidebar({ isOpen, toggleSidebar }) {
     const [collections, setCollections] = useState([]);
@@ -10,6 +11,15 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         const newCollection = { id: collections.length + 1, name: 'New Collection', requests: [] };
         setCollections([...collections, newCollection]);
     }
+
+    const menuOptions = [
+        {name: 'Edit'},
+        {name: 'Add request'},
+        {name: 'Rename'},
+        {name: 'Duplicate'},
+        {name: 'Export'},
+        {name: 'Delete'}
+      ];
 
     return (
         <aside className={`vh-100 px-3 ${styles['sidebar']} ${isOpen ? styles['sidebar-open'] : styles['sidebar']}`}>
@@ -29,14 +39,10 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                 
 
                 <div className={`flex-grow-1 overflow-auto ${isOpen ? '' : 'd-none'}`}>
-                    <ul className="">
+                    <ul>
                         {collections.map(collection => (
-                            // <li key={collection.id} className={styles['collection']}>
-                            //     <a href="#">{collection.name}</a>
-                            // </li>
-
-                            <div key={collection.id} className={styles['collection']}>
-                                <div className={`accordion accordion-dark ${styles['accordion-custom']}`} id={`accordion-${collection.id}`}>
+                            <div key={collection.id} className={styles['collection']} data-bs-theme="dark" onContextMenu={ () => (<ContextMenu options={menuOptions} />)}>
+                                <div className={`accordion ${styles['accordion-custom']}`} id={`accordion-${collection.id}`}>
                                     <div className={`accordion-item `}>
                                         <h2 className="accordion-header">
                                             <button className={`accordion-button ${styles['accordion-button-custom']}`} type="button" data-bs-toggle="collapse" data-bs-target={`#collapse-${collection.id}`}>
@@ -44,8 +50,11 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                                             </button>
                                         </h2>
                                         <div id={`collapse-${collection.id}`} className="accordion-collapse collapse">
-                                            <div className="accordion-body">
-                                                Contenido del acordeón aquí...
+                                            <div className={`accordion-body ${styles['accordion-body-custom']}`}>
+                                                <p>
+                                                    This collection is empty <br />
+                                                    <a href="#">Add a request</a> to start working.
+                                                </p>
                                             </div>
                                         </div>
                                     </div>

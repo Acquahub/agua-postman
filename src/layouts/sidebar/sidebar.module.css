@@ -50,8 +50,7 @@ font-size: 1.2rem;
 }
 
 .collection {
-    background-color: transparent;
-    
+    background-color: var(--secondary-bg-color);
 }
 
 .collection:hover {
@@ -59,22 +58,29 @@ font-size: 1.2rem;
 } 
 
 .accordion-custom {
-    border: none;
+    background-color: var(--secondary-bg-color);
+    border: transparent;
     outline: none;
 }
 
 .accordion-button-custom {
     background-color: var(--secondary-bg-color);
     color: var(--secondary-text-color);
-    border: none;
+    border: transparent;
     outline: none;
 }
 
 .accordion-button-custom:hover {
     background-color: var(--hover-color);
     color: var(--main-text-color);
-    border: none;
+    border: transparent;
     outline: none;
+}
+
+.accordion-body-custom {
+    background-color: var(--secondary-bg-color);
+    font-weight: normal;
+    color: var(--secondary-text-color);
 }
 
 i {
