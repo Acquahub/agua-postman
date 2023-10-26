@@ -13,15 +13,6 @@ function App() {
     setIsOpen(!isOpen);
   }
 
-  const menuOptions = [
-    {name: 'Edit'},
-    {name: 'Add request'},
-    {name: 'Rename'},
-    {name: 'Duplicate'},
-    {name: 'Export'},
-    {name: 'Delete'}
-  ];
-
   return (
     <div className={`${isOpen ? 'containerLayout-packed' : 'containerLayout-expanded'}`}>
       <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
@@ -31,8 +22,6 @@ function App() {
           {/* <RequestMaker />
           <Response /> */}
       </div>
-
-      <ContextMenu options={menuOptions} />
       
     </div>
   );

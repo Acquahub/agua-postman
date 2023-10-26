@@ -50,7 +50,7 @@ export default function KeyValueTable() {
         <tbody>
           {rows.map((row, index) => (
             <tr key={index}>
-              <td><input class="form-check-input" type="checkbox" value=""/></td>
+              <td><input className="form-check-input" type="checkbox" value=""/></td>
               <td>
                 <div className={styles['input-wrapper']}>
                   <input
