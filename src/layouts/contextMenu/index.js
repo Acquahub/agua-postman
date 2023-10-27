@@ -1,18 +1,10 @@
 import styles from "./contextMenu.module.css"
 
-export default function ContextMenu({ options, position, onClose }) {
+export default function ContextMenu({ options, position, onOptionClick, onClose, collectionIndex }) {
+    
     const handleOptionClick = (option) => {
-        if(option.name === 'Delete') {
-            handleDeleteOption(option.id);
-        }
-
-        onClose();
+        onOptionClick(option, collectionIndex);
     }
-
-    const handleDeleteOption = (id) => {
-        alert('Delete collection');
-    }
-
 
     return (
         <div className={`${styles['wrapper']}`}  style={{ top: position.y, left: position.x }}>

@@ -83,6 +83,16 @@ font-size: 1.2rem;
     color: var(--secondary-text-color);
 }
 
+.options-button {
+    border: none;
+    outline: none;
+    background: none;
+}
+
+.options-button:hover {
+    background-color: var(--bg-color);
+}
+
 i {
     width: 80px;
     height: 100%;
