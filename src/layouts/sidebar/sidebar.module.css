@@ -133,3 +133,9 @@ i {
     background-color: var(--hover-color);
     color: var(--main-text-color);
 }
+
+.highlighted-text {
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--highlight-text-color);
+}

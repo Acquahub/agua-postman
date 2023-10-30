@@ -24,6 +24,7 @@ body,
   Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   --sidebar-closed-width: 60px;
   --sidebar-open-width: 260px;
+  --highlight-text-color: #097bed;
 
   --tab-height: 30px;
 }

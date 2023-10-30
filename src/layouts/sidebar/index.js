@@ -48,7 +48,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         collections[index].item = [...collections[index].item, newItem];
     }
 
-    // Handlers for each menu  option -------------------------------------------------------
+    // Handlers for each menu  option ---------------------------------------------------------
     const handleRunCollection = (index) => {
         alert('Run collection ' + index);
     }
@@ -72,23 +72,27 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         };
 
         const newItem = {
-            name: '',
+            name: 'New Request',
             request: newRequest,
             response: []
         };
 
         addCollectionItem(index, newItem);
+
+        console.log(collections[index]);
     } 
 
     const handleAddFolder = (index) => {
         alert('Add folder to collection ' + index);
 
         const newItem = {
-            name: '',
+            name: 'New Folder',
             item: []
         };
 
         addCollectionItem(index, newItem);
+
+        console.log(collections[index]);
     } 
 
     const handleRename = (index) => {
@@ -105,6 +109,16 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
 
     const handleExport = (index) => {
         alert('Export collection ' + index);
+
+        const collectionString = JSON.stringify(collections[index], null, 2);
+        
+        const blob = new Blob([collectionString], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${collections[index].info.name}.json`;
+        a.click();
     }
 
     const handleDelete = (index) => {
@@ -140,8 +154,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     }
 
     const toggleContextMenu = (e) => {
-        setContextMenuPosition({ x: e.clientX, y: e.clientY });
-        setShowContextMenu(true);
+        handleRightClick(e);
         alert('show context menu');
     }
 
@@ -195,33 +208,37 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                                     />
                                 )}
                                 <div className={`accordion ${styles['accordion-custom']}`} id={`accordion-${collection.id}`}>
-                                    <div className={`accordion-item `}>
-                                        <h2 className="accordion-header">
-                                            <button className={`accordion-button ${styles['accordion-button-custom']}`} type="button" data-bs-toggle="collapse" data-bs-target={`#collapse-${collection.id}`}>
-                                                <button className={`${styles['options-button']}`} onClick={(e) => toggleContextMenu(e)}>
-                                                    <i className="bi bi-three-dots"></i>
+                                    <div className={`accordion-item d-flex`}>
+                                        <button className={`${styles['options-button']}`} onClick={(e) => toggleContextMenu(e)}>
+                                            <i className="bi bi-three-dots"></i>
+                                        </button>
+                                        <div>
+                                            <h2 className="accordion-header">
+                                                
+                                                <button className={`accordion-button ${styles['accordion-button-custom']}`} type="button" data-bs-toggle="collapse" data-bs-target={`#collapse-${collection.id}`}>
+                                                    
+                                                    {isEditing && index === editingIndex ? (
+                                                        <input
+                                                            type="text"
+                                                            value={newCollectionName}
+                                                            onChange={(e) => setNewCollectionName(e.target.value)}
+                                                            onBlur={() => finishEditing(editingIndex)}
+                                                        />
+                                                    ) : (
+                                                        <span onDoubleClick={() => startEditing(index)}>{collection.info.name}</span>
+                                                    )}
                                                 </button>
-
-                                                {isEditing && index === editingIndex ? (
-                                                    <input
-                                                        type="text"
-                                                        value={newCollectionName}
-                                                        onChange={(e) => setNewCollectionName(e.target.value)}
-                                                        onBlur={() => finishEditing(editingIndex)}
-                                                    />
-                                                ) : (
-                                                    <span onDoubleClick={() => startEditing(index)}>{collection.info.name}</span>
-                                                )}
-                                            </button>
-                                        </h2>
-                                        <div id={`collapse-${collection.id}`} className="accordion-collapse collapse">
-                                            <div className={`accordion-body ${styles['accordion-body-custom']}`}>
-                                                <p>
-                                                    This collection is empty <br />
-                                                    <a href="#">Add a request</a> to start working.
-                                                </p>
+                                            </h2>
+                                            <div id={`collapse-${collection.id}`} className="accordion-collapse collapse">
+                                                <div className={`accordion-body ${styles['accordion-body-custom']}`}>
+                                                    <p>
+                                                        This collection is empty <br />
+                                                        <span className={`${styles['highlighted-text']}`} onClick={() => handleAddRequest(index)}>Add a request</span> to start working.
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
+                                        
                                     </div>
                                 </div>
                             </div>
