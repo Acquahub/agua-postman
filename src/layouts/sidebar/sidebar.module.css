@@ -139,3 +139,12 @@ i {
     font-weight: bold;
     color: var(--highlight-text-color);
 }
+
+.import-button {
+    background-color: var(--secondary-button-color);
+    color: var(--main-text-color);
+    border: none;
+    border-radius: 2px;
+    padding: 2px 8px;
+    margin: 2px;
+}

@@ -1,8 +1,9 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap/dist/js/bootstrap.min.js"
 import styles from "./sidebar.module.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import ContextMenu from "../contextMenu";
+import CollectionsTree from "../collectionsTree";
 
 export default function Sidebar({ isOpen, toggleSidebar }) {
     const [collections, setCollections] = useState([]);
@@ -42,19 +43,45 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         };
 
         setCollections([...collections, newCollection]);
+        console.log(collections);
     }
 
     const addCollectionItem = (index, newItem) => {
         collections[index].item = [...collections[index].item, newItem];
     }
 
+    const handleImport = () => {
+        fileInputRef.current.click();
+        console.log(collections);
+    }      
+
+    // Upload file ----------------------------------------------------------------------------
+    const fileInputRef = useRef();
+
+    const handleFileUpload = (e) => {
+        const file = e.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const content = e.target.result;
+                try {
+                    const importedCollection = JSON.parse(content);
+                    setCollections([...collections, importedCollection]);
+                    
+                } catch (error) {
+                    console.error('Error trying to parse JSON file: ', error);
+                }
+            };
+
+            reader.readAsText(file);
+        }
+    };
+
+
     // Handlers for each menu  option ---------------------------------------------------------
     const handleRunCollection = (index) => {
         alert('Run collection ' + index);
-    }
-    
-    const handleEdit = (index) => {
-        alert('Edit collection ' + index);
     }
     
     const handleAddRequest = (index) => {
@@ -108,8 +135,6 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     }
 
     const handleExport = (index) => {
-        alert('Export collection ' + index);
-
         const collectionString = JSON.stringify(collections[index], null, 2);
         
         const blob = new Blob([collectionString], { type: 'application/json' });
@@ -117,7 +142,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
 
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${collections[index].info.name}.json`;
+        a.download = `${collections[index].info.name}.agua_collection.json`;
         a.click();
     }
 
@@ -125,15 +150,12 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         const newCollections = [...collections];
         newCollections.splice(index, 1);
         setCollections(newCollections);
-
-        alert('Delete collection ' + index);
     }
 
     // ----------------------------------------------------------------------------------------
 
     const menuOptions = [
         { name: 'Run collection', action: collectionIndex => {handleRunCollection(collectionIndex)} },
-        { name: 'Edit',           action: collectionIndex => {handleEdit(collectionIndex)} },
         { name: 'Add request',    action: collectionIndex => {handleAddRequest(collectionIndex)} },
         { name: 'Add folder',     action: collectionIndex => {handleAddFolder(collectionIndex)} },
         { name: 'Rename',         action: collectionIndex => {handleRename(collectionIndex)} },
@@ -181,11 +203,16 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     return (
         <aside className={`vh-100 px-3 ${styles['sidebar']} ${isOpen ? styles['sidebar-open'] : styles['sidebar']}`}>
             <nav className={`h-100 d-flex flex-column border-right shadow-sm`}>
-                <div className="pt-4 px-2 pb-2 d-flex justify-between align-content-center">
+                <div className="pt-4 px-2 pb-2 d-flex justify-between align-content-center align-items-center">
                     <div className={styles['sidebar-toggle']} onClick={toggleSidebar}>
                         <span className="pe-3"><i className="bi bi-collection"></i></span>
                         <p className={`${isOpen ? '' : 'd-none'}`}>Collections</p>
                     </div>
+
+                    <span className={`${isOpen ? '' : 'd-none'}`}>
+                    <input type="file" accept=".json" onChange={handleFileUpload} style={{ display: 'none' }} ref={fileInputRef} />
+                        <button className={styles['import-button']} onClick={handleImport}>Import</button>
+                    </span>
                     
                 </div>
 
@@ -193,7 +220,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                     <button className={styles['add-button']} onClick={handleAddCollection}></button>
                     <input type="text" className={styles['search-bar']} placeholder="search collections" />
                 </div>
-                
+
                 <div className={`flex-grow-1 overflow-auto ${isOpen ? '' : 'd-none'}`}>
                     <ul>
                         {collections.map((collection, index) => (
@@ -244,6 +271,14 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                             </div>
                         ))}
                     </ul>
+                    
+                    {/* <CollectionsTree 
+                        collections={collections}
+                        handleRightClick={handleRightClick}
+                    /> */}
+                    
+                    
+                    
                 </div>
             </nav>
         </aside>
