@@ -110,11 +110,10 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     } 
 
     const handleAddFolder = (index) => {
-        alert('Add folder to collection ' + index);
-
         const newItem = {
             name: 'New Folder',
-            item: []
+            item: [],
+            description: ''
         };
 
         addCollectionItem(index, newItem);
