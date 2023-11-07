@@ -18,6 +18,8 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     const [showContextMenu, setShowContextMenu] = useState(false);
     const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
 
+    const [lastContextMenuId, setLastContextMenuId] = useState('');
+
     // States to rename a collection
     const [isEditing, setIsEditing] = useState(false);
     const [newCollectionName, setNewCollectionName] = useState('');
@@ -85,14 +87,41 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         }
     };
 
+    const getClonedItemToPerformAction = (action, id) => {
+        // TODO: Es necesario chequear el action
+        // Si action es addRequest y el elemento al que se le dio click es
+        // un request, entonces el nuevo request debe ser agregado en el padre, es decir,
+        // no se debe retornar el elemento al que se le dio click, sino su padre.
+        // Por otro lado, si es un rename, si se debe retornar siempre el elemento
+        // al que se le dio click.
+        const cloneCollections = [...collections];
+        const idParts = id.split('-');
+        const l = idParts.length;
+        let myObject = cloneCollections[idParts[0]];
+        let lastFolder = myObject;
+        for (let i = 1; i < l; i++) {
+            const item = myObject.item[idParts[i]];
+            if (item.request) break;
+            myObject = myObject.item[idParts[i]];
+            lastFolder = myObject;
+        }
 
-    // Handlers for each menu  option ---------------------------------------------------------
-    const handleRunCollection = (index) => {
-        alert('Run collection ' + index);
+        switch (action) {
+            case 'addRequest': {
+                return lastFolder
+            }
+            case 'addFolder': {
+                return lastFolder
+            }
+            default: {
+                return myObject;
+            }
+        }
     }
 
+    // Handlers for each menu  option ---------------------------------------------------------
     const handleAddRequest = (collectionIndex) => {
-        const updatedCollection = { ...collections[collectionIndex] };
+        const updatedCollection = getClonedItemToPerformAction('addRequest', lastContextMenuId);
 
         if (!updatedCollection.item || updatedCollection.item.length === 0) {
             updatedCollection.item = [];
@@ -118,13 +147,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         updatedCollection.item.push(newItem);
 
         updatedCollection.isEmpty = false;
-
-        const updatedCollections = [...collections];
-        updatedCollections[collectionIndex] = updatedCollection;
-
-        setCollections(updatedCollections);
     };
-
 
     const handleAddFolder = (collectionIndex) => {
         const updatedCollection = { ...collections[collectionIndex] };
@@ -189,17 +212,19 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     // ----------------------------------------------------------------------------------------
 
     const menuOptions = [
-        { name: 'Run collection', action: collectionIndex => {handleRunCollection(collectionIndex)} },
-        { name: 'Add request',    action: collectionIndex => {handleAddRequest(collectionIndex)} },
-        { name: 'Add folder',     action: collectionIndex => {handleAddFolder(collectionIndex)} },
-        { name: 'Rename',         action: collectionIndex => {handleRename(collectionIndex)} },
-        { name: 'Duplicate',      action: collectionIndex => {handleDuplicate(collectionIndex)} },
-        { name: 'Export',         action: collectionIndex => {handleExport(collectionIndex)} },
-        { name: 'Delete',         action: collectionIndex => {handleDelete(collectionIndex)} }
+        { name: 'Add request', action: collectionIndex => { handleAddRequest(collectionIndex) } },
+        { name: 'Add folder', action: collectionIndex => { handleAddFolder(collectionIndex) } },
+        { name: 'Rename', action: collectionIndex => { handleRename(collectionIndex) } },
+        { name: 'Duplicate', action: collectionIndex => { handleDuplicate(collectionIndex) } },
+        { name: 'Export', action: collectionIndex => { handleExport(collectionIndex) } },
+        { name: 'Delete', action: collectionIndex => { handleDelete(collectionIndex) } }
     ];
 
-    const handleRightClick = (e) => {
+    const handleRightClick = (e, id) => {
         e.preventDefault();
+        e.stopPropagation();
+
+        setLastContextMenuId(id);
 
         setContextMenuPosition({ x: e.clientX, y: e.clientY });
         setShowContextMenu(true);
@@ -215,6 +240,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     }
 
     const handleOptionClick = (option, collectionIndex) => {
+        console.log(collectionIndex);
         option.action(collectionIndex);
         setShowContextMenu(false);
     }
@@ -236,16 +262,13 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     const renderTreeItems = (items, parentIndex) => {
         return items.map((collection, index) => (
             <TreeItem nodeId={`${parentIndex}-${index}`}
-                      label={collection.info ? collection.info.name : collection.name}
-                      key={`${parentIndex}-${index}`} onContextMenu={(e) => handleRightClick(e)}
+                label={collection.info ? collection.info.name : collection.name}
+                key={`${parentIndex}-${index}`} onContextMenu={(e) => handleRightClick(e, `${parentIndex}-${index}`)}
             >
                 {collection.item && collection.item.length > 0 && renderTreeItems(collection.item, `${parentIndex}-${index}`)}
             </TreeItem>
         ));
     };
-
-    console.log(collections)
-
 
     return (
         <aside className={`vh-100 px-3 ${styles['sidebar']} ${isOpen ? styles['sidebar-open'] : styles['sidebar']}`}>
@@ -261,7 +284,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                     </div>
 
                     <span className={`${isOpen ? '' : 'd-none'}`}>
-                    <input type="file" accept=".json" onChange={handleFileUpload} style={{ display: 'none' }} ref={fileInputRef} />
+                        <input type="file" accept=".json" onChange={handleFileUpload} style={{ display: 'none' }} ref={fileInputRef} />
                         <button className={styles['import-button']} onClick={handleImport}>Import</button>
                     </span>
 
@@ -274,39 +297,38 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
 
                 <div className={`flex-grow-1 overflow-auto ${isOpen ? '' : 'd-none'}`}>
 
-                        <Box sx={{ minHeight: 180, flexGrow: 1, maxWidth: 300 }}>
-                            <TreeView
-                                aria-label="file system navigator"
-                                defaultCollapseIcon={<ExpandMoreIcon />}
-                                defaultExpandIcon={<ChevronRightIcon />}
-                            >
-                                {collections.map((collection, index) => (
-                                    <div key={collection.info.id} className={styles['collection']} data-bs-theme="dark" onContextMenu={(e) => handleRightClick(e)}>
-                                        {showContextMenu && (
-                                            <ContextMenu
-                                                options={menuOptions}
-                                                position={contextMenuPosition}
-                                                onClose={handleContextMenuClose}
-                                                onOptionClick={handleOptionClick}
-                                                collectionIndex={index}
+                    <Box sx={{ minHeight: 180, flexGrow: 1, maxWidth: 300 }}>
+                        <TreeView
+                            aria-label="file system navigator"
+                            defaultCollapseIcon={<ExpandMoreIcon />}
+                            defaultExpandIcon={<ChevronRightIcon />}
+                        >
+                            {collections.map((collection, index) => (
+                                <div key={collection.info.id} className={styles['collection']} data-bs-theme="dark" onContextMenu={(e) => handleRightClick(e, `${index}`)}>
+                                    {showContextMenu && (
+                                        <ContextMenu
+                                            options={menuOptions}
+                                            position={contextMenuPosition}
+                                            onClose={handleContextMenuClose}
+                                            onOptionClick={handleOptionClick}
+                                            collectionIndex={index}
+                                        />
+                                    )}
+                                    <TreeItem nodeId={`collection-${index}`} label={collection.info ? collection.info.name : collection.name} key={`${index}`}>
+                                        {collection.isEmpty ? (
+                                            <TreeItem
+                                                nodeId={`empty-${index}`}
+                                                label="This collection is empty"
                                             />
-                                        )}
-                                        <TreeItem nodeId={`collection-${index}`} label={collection.info ? collection.info.name : collection.name} key={`collection-${index}`}>
-                                            {collection.isEmpty ? (
-                                                <TreeItem
-                                                    nodeId={`empty-${index}`}
-                                                    label="This collection is empty"
-                                                />
-                                            ) : null}
-                                            {collection.item && collection.item.length > 0 && renderTreeItems(collection.item, `collection-${index}`)}
-                                        </TreeItem>
-                                    </div>
-                                ))}
-                            </TreeView>
-                        </Box>
+                                        ) : null}
+                                        {collection.item && collection.item.length > 0 && renderTreeItems(collection.item, `${index}`)}
+                                    </TreeItem>
+                                </div>
+                            ))}
+                        </TreeView>
+                    </Box>
 
                 </div>
-
             </nav>
         </aside>
 
