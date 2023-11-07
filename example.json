@@ -1,0 +1,347 @@
+{
+  "info": {
+    "id": "0033d9ea-8b3d-4430-89f3-b9d1bfcc3a48",
+    "name": "Backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "23673395",
+    "_collection_link": "https://galactic-shuttle-104363.postman.co/workspace/Acqua~741e792a-ba7f-46a0-8496-4c2332ef2207/collection/23673395-0033d9ea-8b3d-4430-89f3-b9d1bfcc3a48?action=share&source=collection_link&creator=23673395"
+  },
+  "item": [
+    {
+      "name": "Metrics",
+      "item": [
+        {
+          "name": "Info",
+
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{domain}}:{{port}}/info",
+              "host": ["{{domain}}"],
+              "port": "{{port}}",
+              "path": ["info"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{domain}}:{{port}}/health",
+              "host": ["{{domain}}"],
+              "port": "{{port}}",
+              "path": ["health"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{domain}}:{{port}}/metrics",
+              "host": ["{{domain}}"],
+              "port": "{{port}}",
+              "path": ["metrics"]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "This folder contains the request that provides information metrics about the back-end, for example, health, info and metrics."
+    },
+    {
+      "name": "Projects",
+      "item": [
+        {
+          "name": "Subscription",
+          "item": [
+            {
+              "name": "Create Subscription",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"plan\": \"{{test_plan_pro}}\",\n    \"frequency\": \"{{frequency_monthly}}\",\n    \"id\": \"{{user_id}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{domain}}:{{port}}/{{apiRoute}}/{{subscriptionRoute}}/",
+                  "host": ["{{domain}}"],
+                  "port": "{{port}}",
+                  "path": ["{{apiRoute}}", "{{subscriptionRoute}}", ""]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Subscription",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{domain}}:{{port}}/{{apiRoute}}/{{subscriptionRoute}}/{{user_id}}",
+                  "host": ["{{domain}}"],
+                  "port": "{{port}}",
+                  "path": [
+                    "{{apiRoute}}",
+                    "{{subscriptionRoute}}",
+                    "{{user_id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Subscription",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"plan\": \"{{test_plan_pro}}\",\n    \"frequency\": \"{{frequency_annually}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{domain}}:{{port}}/{{apiRoute}}/{{subscriptionRoute}}/{{user_id}}",
+                  "host": ["{{domain}}"],
+                  "port": "{{port}}",
+                  "path": [
+                    "{{apiRoute}}",
+                    "{{subscriptionRoute}}",
+                    "{{user_id}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Subscription",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"plan\": \"pro\",\n    \"frequency\": \"monthly\",\n    \"id\": \"{{user_id}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{domain}}:{{port}}/{{apiRoute}}/{{subscriptionRoute}}/{{user_id}}",
+                  "host": ["{{domain}}"],
+                  "port": "{{port}}",
+                  "path": [
+                    "{{apiRoute}}",
+                    "{{subscriptionRoute}}",
+                    "{{user_id}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "User",
+          "item": [
+            {
+              "name": "Auth",
+              "item": [
+                {
+                  "name": "Sign up",
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"email\": \"{{test_email}}\",\n    \"password\": \"{{test_password}}\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{domain}}:{{port}}/{{apiRoute}}/{{authRoute}}/signup",
+                      "host": ["{{domain}}"],
+                      "port": "{{port}}",
+                      "path": ["{{apiRoute}}", "{{authRoute}}", "signup"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Sign in",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "var jsonData = pm.response.json();",
+                          "pm.environment.set(\"ag_token\", jsonData.data.token);",
+                          ""
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"email\": \"{{test_email}}\",\n    \"password\": \"{{test_password}}\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{domain}}:{{port}}/{{apiRoute}}/{{authRoute}}/signin",
+                      "host": ["{{domain}}"],
+                      "port": "{{port}}",
+                      "path": ["{{apiRoute}}", "{{authRoute}}", "signin"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Verify Token",
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"email\": \"{{test_email}}\",\n    \"token\": \"{{ag_token}}\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{domain}}:{{port}}/{{apiRoute}}/{{authRoute}}/verify",
+                      "host": ["{{domain}}"],
+                      "port": "{{port}}",
+                      "path": ["{{apiRoute}}", "{{authRoute}}", "verify"]
+                    }
+                  },
+                  "response": []
+                }
+              ],
+              "description": "This folder contains requests for the authentication and authorization APIs of the back-end."
+            },
+            {
+              "name": "Create User",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData.data.id != undefined) {",
+                      "    pm.environment.set(\"user_id\", jsonData.data.id);",
+                      "}",
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"{{test_email}}\",\n    \"password\": \"{{test_password}}\",\n    \"name\": \"{{test_name}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{domain}}:{{port}}/{{apiRoute}}/{{userRoute}}/",
+                  "host": ["{{domain}}"],
+                  "port": "{{port}}",
+                  "path": ["{{apiRoute}}", "{{userRoute}}", ""]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get User",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{domain}}:{{port}}/{{apiRoute}}/{{userRoute}}/{{user_id}}",
+                  "host": ["{{domain}}"],
+                  "port": "{{port}}",
+                  "path": ["{{apiRoute}}", "{{userRoute}}", "{{user_id}}"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update User",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"{{test_name_2}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{domain}}:{{port}}/{{apiRoute}}/{{userRoute}}/{{user_id}}",
+                  "host": ["{{domain}}"],
+                  "port": "{{port}}",
+                  "path": ["{{apiRoute}}", "{{userRoute}}", "{{user_id}}"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete User",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{domain}}:{{port}}/{{apiRoute}}/{{userRoute}}/{{user_id}}",
+                  "host": ["{{domain}}"],
+                  "port": "{{port}}",
+                  "path": ["{{apiRoute}}", "{{userRoute}}", "{{user_id}}"]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
