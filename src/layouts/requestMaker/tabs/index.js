@@ -12,10 +12,11 @@ export default function Tabs({ tabs }) {
   return (
     <div className={styles['container']}>
       <div className={styles['tabs']}>
-        {tabs.map((tab) => {
+        {tabs.map((tab, index) => {
           return (
             <div
               onClick={() => handlerTabClicked(tab.name)}
+              key={`tab-${index}`}
               className={styles['tabItem'] + ' ' + (currentTab === tab.name ? styles['activeTabItem'] : '')}>
               {tab.name}
             </div>
