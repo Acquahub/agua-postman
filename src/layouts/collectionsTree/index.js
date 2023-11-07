@@ -1,3 +1,4 @@
+/*
 import TreeNode from '../treeNode';
 import styles from "../sidebar/sidebar.module.css";
 
@@ -18,12 +19,12 @@ export default function CollectionsTree({ collections, handleRightClick }) {
                             collectionIndex={index}
                         />
                     )}
-                </div>   
+                </div>
             ))}
 
-                
+
         </ul>
-        
+
 
     );
-}
+}*/

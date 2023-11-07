@@ -5,11 +5,11 @@ border: none;
 }
 
 .list-group-item:hover {
-background-color: #34495e; 
+background-color: #34495e;
 }
 
 .add-button {
-    background: none; 
+    background: none;
     border: none;
     color: var(--main-text-color);
     font-weight: bold;
@@ -50,12 +50,8 @@ font-size: 1.2rem;
 }
 
 .collection {
-    background-color: var(--secondary-bg-color);
-}
-
-.collection:hover {
     color: var(--main-text-color);
-} 
+}
 
 .accordion-custom {
     background-color: var(--secondary-bg-color);
@@ -106,7 +102,7 @@ i {
     background-color: var(--secondary-bg-color);
     border-right: solid 1px var(--tb-border-color);
     padding: 0.4rem 0.8rem;
-    resize: horizontal;
+    resize: none;
     overflow: auto;
     transition: all 0.3s ease;
 }

@@ -3,6 +3,7 @@
     width: 200px;
     background-color: var(--bg-color);
     border-radius: 10px;
+    z-index: 1000;
 }
 
 .wrapper .menu {

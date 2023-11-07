@@ -3,7 +3,13 @@ import "bootstrap/dist/js/bootstrap.min.js"
 import styles from "./sidebar.module.css";
 import { useState, useEffect, useRef } from "react";
 import ContextMenu from "../contextMenu";
-import CollectionsTree from "../collectionsTree";
+
+import Box from '@mui/material/Box';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { TreeView } from '@mui/x-tree-view/TreeView';
+import { TreeItem } from '@mui/x-tree-view/TreeItem';
+
 
 export default function Sidebar({ isOpen, toggleSidebar }) {
     const [collections, setCollections] = useState([]);
@@ -33,18 +39,19 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     }
 
     const handleAddCollection = () => {
-        const newCollection = { 
+        const newCollection = {
             info: {
-                id: collections.length + 1, 
-                name: 'New Collection'
+                id: collections.length + 1,
+                name: 'New Collection',
             },
-
-            item: []
+            isEmpty: true,
+            item: [],
         };
 
-        setCollections([...collections, newCollection]);
+        const updatedCollections = [...collections, newCollection];
+        setCollections(updatedCollections);
         console.log(collections);
-    }
+    };
 
     const addCollectionItem = (index, newItem) => {
         collections[index].item = [...collections[index].item, newItem];
@@ -53,7 +60,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     const handleImport = () => {
         fileInputRef.current.click();
         console.log(collections);
-    }      
+    }
 
     // Upload file ----------------------------------------------------------------------------
     const fileInputRef = useRef();
@@ -68,7 +75,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                 try {
                     const importedCollection = JSON.parse(content);
                     setCollections([...collections, importedCollection]);
-                    
+
                 } catch (error) {
                     console.error('Error trying to parse JSON file: ', error);
                 }
@@ -83,9 +90,13 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     const handleRunCollection = (index) => {
         alert('Run collection ' + index);
     }
-    
-    const handleAddRequest = (index) => {
-        alert('Add request to collection ' + index);
+
+    const handleAddRequest = (collectionIndex) => {
+        const updatedCollection = { ...collections[collectionIndex] };
+
+        if (!updatedCollection.item || updatedCollection.item.length === 0) {
+            updatedCollection.item = [];
+        }
 
         const newRequest = {
             method: '',
@@ -94,32 +105,56 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                 raw: '',
                 host: '',
                 port: '',
-                path: []
-            }
+                path: [],
+            },
         };
 
         const newItem = {
             name: 'New Request',
             request: newRequest,
-            response: []
+            response: [],
         };
 
-        addCollectionItem(index, newItem);
+        updatedCollection.item.push(newItem);
 
-        console.log(collections[index]);
-    } 
+        updatedCollection.isEmpty = false;
 
-    const handleAddFolder = (index) => {
-        const newItem = {
+        const updatedCollections = [...collections];
+        updatedCollections[collectionIndex] = updatedCollection;
+
+        setCollections(updatedCollections);
+    };
+
+
+    const handleAddFolder = (collectionIndex) => {
+        const updatedCollection = { ...collections[collectionIndex] };
+
+        if (!updatedCollection.item || updatedCollection.item.length === 0) {
+            updatedCollection.item = [];
+        }
+
+        const newFolder = {
             name: 'New Folder',
-            item: [],
-            description: ''
+            isEmpty: true,
+            item: [
+                {
+                    name: 'This folder is empty',
+                }
+            ],
+            description: '',
         };
 
-        addCollectionItem(index, newItem);
+        updatedCollection.item.push(newFolder);
 
-        console.log(collections[index]);
-    } 
+        updatedCollection.isEmpty = false;
+
+        const updatedCollections = [...collections];
+        updatedCollections[collectionIndex] = updatedCollection;
+
+        setCollections(updatedCollections);
+    };
+
+
 
     const handleRename = (index) => {
         startEditing(index);
@@ -135,7 +170,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
 
     const handleExport = (index) => {
         const collectionString = JSON.stringify(collections[index], null, 2);
-        
+
         const blob = new Blob([collectionString], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
 
@@ -162,7 +197,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         { name: 'Export',         action: collectionIndex => {handleExport(collectionIndex)} },
         { name: 'Delete',         action: collectionIndex => {handleDelete(collectionIndex)} }
     ];
-    
+
     const handleRightClick = (e) => {
         e.preventDefault();
 
@@ -198,21 +233,38 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         }
     }, [showContextMenu]);
 
+    const renderTreeItems = (items, parentIndex) => {
+        return items.map((collection, index) => (
+            <TreeItem nodeId={`${parentIndex}-${index}`}
+                      label={collection.info ? collection.info.name : collection.name}
+                      key={`${parentIndex}-${index}`} onContextMenu={(e) => handleRightClick(e)}
+            >
+                {collection.item && collection.item.length > 0 && renderTreeItems(collection.item, `${parentIndex}-${index}`)}
+            </TreeItem>
+        ));
+    };
+
+    console.log(collections)
+
 
     return (
         <aside className={`vh-100 px-3 ${styles['sidebar']} ${isOpen ? styles['sidebar-open'] : styles['sidebar']}`}>
             <nav className={`h-100 d-flex flex-column border-right shadow-sm`}>
                 <div className="pt-4 px-2 pb-2 d-flex justify-between align-content-center align-items-center">
                     <div className={styles['sidebar-toggle']} onClick={toggleSidebar}>
-                        <span className="pe-3"><i className="bi bi-collection"></i></span>
-                        <p className={`${isOpen ? '' : 'd-none'}`}>Collections</p>
+                        <div className={isOpen ? "pe-3" : ""}>
+                            <span className=""><i className="bi bi-collection"></i></span>
+                        </div>
+                        <div>
+                            <p className={`${isOpen ? '' : 'd-none'}`}>Collections</p>
+                        </div>
                     </div>
 
                     <span className={`${isOpen ? '' : 'd-none'}`}>
                     <input type="file" accept=".json" onChange={handleFileUpload} style={{ display: 'none' }} ref={fileInputRef} />
                         <button className={styles['import-button']} onClick={handleImport}>Import</button>
                     </span>
-                    
+
                 </div>
 
                 <div className={`pb-4 px-2 pb-2 d-flex justify-between align-content-center ${isOpen ? '' : 'd-none'}`}>
@@ -221,66 +273,42 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                 </div>
 
                 <div className={`flex-grow-1 overflow-auto ${isOpen ? '' : 'd-none'}`}>
-                    <ul>
-                        {collections.map((collection, index) => (
-                            <div key={collection.info.id} className={styles['collection']} data-bs-theme="dark" onContextMenu={(e) => handleRightClick(e)}>
-                                {showContextMenu && (
-                                    <ContextMenu
-                                        options={menuOptions}
-                                        position={contextMenuPosition}
-                                        onClose={handleContextMenuClose}
-                                        onOptionClick={handleOptionClick}
-                                        collectionIndex={index}
-                                    />
-                                )}
-                                <div className={`accordion ${styles['accordion-custom']}`} id={`accordion-${collection.id}`}>
-                                    <div className={`accordion-item d-flex`}>
-                                        <button className={`${styles['options-button']}`} onClick={(e) => toggleContextMenu(e)}>
-                                            <i className="bi bi-three-dots"></i>
-                                        </button>
-                                        <div>
-                                            <h2 className="accordion-header">
-                                                
-                                                <button className={`accordion-button ${styles['accordion-button-custom']}`} type="button" data-bs-toggle="collapse" data-bs-target={`#collapse-${collection.id}`}>
-                                                    
-                                                    {isEditing && index === editingIndex ? (
-                                                        <input
-                                                            type="text"
-                                                            value={newCollectionName}
-                                                            onChange={(e) => setNewCollectionName(e.target.value)}
-                                                            onBlur={() => finishEditing(editingIndex)}
-                                                        />
-                                                    ) : (
-                                                        <span onDoubleClick={() => startEditing(index)}>{collection.info.name}</span>
-                                                    )}
-                                                </button>
-                                            </h2>
-                                            <div id={`collapse-${collection.id}`} className="accordion-collapse collapse">
-                                                <div className={`accordion-body ${styles['accordion-body-custom']}`}>
-                                                    <p>
-                                                        This collection is empty <br />
-                                                        <span className={`${styles['highlighted-text']}`} onClick={() => handleAddRequest(index)}>Add a request</span> to start working.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
+
+                        <Box sx={{ minHeight: 180, flexGrow: 1, maxWidth: 300 }}>
+                            <TreeView
+                                aria-label="file system navigator"
+                                defaultCollapseIcon={<ExpandMoreIcon />}
+                                defaultExpandIcon={<ChevronRightIcon />}
+                            >
+                                {collections.map((collection, index) => (
+                                    <div key={collection.info.id} className={styles['collection']} data-bs-theme="dark" onContextMenu={(e) => handleRightClick(e)}>
+                                        {showContextMenu && (
+                                            <ContextMenu
+                                                options={menuOptions}
+                                                position={contextMenuPosition}
+                                                onClose={handleContextMenuClose}
+                                                onOptionClick={handleOptionClick}
+                                                collectionIndex={index}
+                                            />
+                                        )}
+                                        <TreeItem nodeId={`collection-${index}`} label={collection.info ? collection.info.name : collection.name} key={`collection-${index}`}>
+                                            {collection.isEmpty ? (
+                                                <TreeItem
+                                                    nodeId={`empty-${index}`}
+                                                    label="This collection is empty"
+                                                />
+                                            ) : null}
+                                            {collection.item && collection.item.length > 0 && renderTreeItems(collection.item, `collection-${index}`)}
+                                        </TreeItem>
                                     </div>
-                                </div>
-                            </div>
-                        ))}
-                    </ul>
-                    
-                    {/* <CollectionsTree 
-                        collections={collections}
-                        handleRightClick={handleRightClick}
-                    /> */}
-                    
-                    
-                    
+                                ))}
+                            </TreeView>
+                        </Box>
+
                 </div>
+
             </nav>
         </aside>
-        
+
     );
 }

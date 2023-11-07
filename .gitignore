@@ -129,4 +129,8 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-EstructuraPostman.txt
+.idea
+.vscode
+```
+.DS_Store
+.ds_store
