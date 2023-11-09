@@ -7,7 +7,7 @@ import { useState } from "react";
 import ContextMenu from './layouts/contextMenu';
 
 function App() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);

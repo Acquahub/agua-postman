@@ -33,7 +33,14 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
 
     const finishEditing = (index) => {
         const updatedCollections = [...collections];
-        updatedCollections[index].info.name = newCollectionName;
+        const editedCollection = updatedCollections[index];
+
+        if(editedCollection.info) {
+            editedCollection.info.name = newCollectionName;
+        } else {
+            editedCollection.name = newCollectionName;
+        }
+
         setCollections(updatedCollections);
 
         setIsEditing(false);
@@ -99,8 +106,21 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         const l = idParts.length;
         let myObject = cloneCollections[idParts[0]];
         let lastFolder = myObject;
+        let duplicatedItem = {};
         for (let i = 1; i < l; i++) {
-            const item = myObject.item[idParts[i]];
+             let item = myObject.item[idParts[i]];
+            console.log('item: ', item)
+
+            if(action === 'duplicate' && i === l - 1) {
+                 duplicatedItem = {...item};
+                lastFolder.item.push(duplicatedItem);
+                break;
+            }
+
+            if(action === 'rename' || action=== 'delete' && i === l - 1) {
+                return item;
+            }
+
             if (item.request) break;
             myObject = myObject.item[idParts[i]];
             lastFolder = myObject;
@@ -113,14 +133,27 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
             case 'addFolder': {
                 return lastFolder
             }
+            case 'duplicate': {
+                return  lastFolder
+            }
             default: {
                 return myObject;
             }
         }
     }
 
+    const setItemOnClonedCollections = (id, item) => {
+
+    }
+
+    const getIndexFromContextMenuId = (contextMenuId) => {
+        const idParts = contextMenuId.split('-');
+        return parseInt(idParts[idParts.length - 1]);
+    };
+
+
     // Handlers for each menu  option ---------------------------------------------------------
-    const handleAddRequest = (collectionIndex) => {
+    const handleAddRequest = () => {
         const updatedCollection = getClonedItemToPerformAction('addRequest', lastContextMenuId);
 
         if (!updatedCollection.item || updatedCollection.item.length === 0) {
@@ -144,13 +177,17 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
             response: [],
         };
 
-        updatedCollection.item.push(newItem);
+        console.log('updatedCollection: ', updatedCollection)
 
+        updatedCollection.item.push(newItem);
         updatedCollection.isEmpty = false;
     };
 
-    const handleAddFolder = (collectionIndex) => {
-        const updatedCollection = { ...collections[collectionIndex] };
+    console.log('collections: ', collections)
+
+    const handleAddFolder = () => {
+
+        const updatedCollection = getClonedItemToPerformAction('addFolder', lastContextMenuId);
 
         if (!updatedCollection.item || updatedCollection.item.length === 0) {
             updatedCollection.item = [];
@@ -170,28 +207,44 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         updatedCollection.item.push(newFolder);
 
         updatedCollection.isEmpty = false;
-
-        const updatedCollections = [...collections];
-        updatedCollections[collectionIndex] = updatedCollection;
-
-        setCollections(updatedCollections);
     };
 
 
 
-    const handleRename = (index) => {
-        startEditing(index);
+    const handleRename = () => {
 
-        alert('Rename collection ' + index);
+        const updatedElement = getClonedItemToPerformAction('rename', lastContextMenuId);
+
+
+        const isRequest = updatedElement.hasOwnProperty('request');
+
+
+        const newName = prompt(`Enter a new name for the ${isRequest ? 'request' : 'folder'}`, updatedElement.name);
+
+        if (newName !== null) {
+
+            if (isRequest) {
+                updatedElement.name = newName;
+            } else {
+                updatedElement.info ? updatedElement.info.name = newName : updatedElement.name = newName;
+            }
+
+
+            setCollections([...collections]);
+        }
+    };
+
+
+    const handleDuplicate = () => {
+
+         const parentCollection = getClonedItemToPerformAction('duplicate', lastContextMenuId);
+
+
     }
 
-    const handleDuplicate = (index) => {
-        const newCollection = structuredClone(collections[index]);
-        const newCollections = [...collections, newCollection];
-        setCollections(newCollections);
-    }
+    const handleExport = () => {
+        const index = getIndexFromContextMenuId(lastContextMenuId);
 
-    const handleExport = (index) => {
         const collectionString = JSON.stringify(collections[index], null, 2);
 
         const blob = new Blob([collectionString], { type: 'application/json' });
@@ -203,7 +256,9 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         a.click();
     }
 
-    const handleDelete = (index) => {
+    const handleDelete = () => {
+        const index = getIndexFromContextMenuId(lastContextMenuId);
+
         const newCollections = [...collections];
         newCollections.splice(index, 1);
         setCollections(newCollections);
@@ -240,7 +295,6 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     }
 
     const handleOptionClick = (option, collectionIndex) => {
-        console.log(collectionIndex);
         option.action(collectionIndex);
         setShowContextMenu(false);
     }
@@ -262,7 +316,21 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     const renderTreeItems = (items, parentIndex) => {
         return items.map((collection, index) => (
             <TreeItem nodeId={`${parentIndex}-${index}`}
-                label={collection.info ? collection.info.name : collection.name}
+                      label={ isEditing  ? (
+                              <input
+                                  type="text"
+                                  value={newCollectionName}
+                                  onChange={(e) => setNewCollectionName(e.target.value)}
+                                  onBlur={() => finishEditing(`${parentIndex}-${index}`)}
+                                  autoFocus
+                              />
+                          ) :
+                          (
+                              <span onDoubleClick={() => startEditing(`${parentIndex}-${index}`)}
+                              >
+                                  {collection.info ? collection.info.name : collection.name}
+                              </span>
+                          )}
                 key={`${parentIndex}-${index}`} onContextMenu={(e) => handleRightClick(e, `${parentIndex}-${index}`)}
             >
                 {collection.item && collection.item.length > 0 && renderTreeItems(collection.item, `${parentIndex}-${index}`)}
@@ -314,7 +382,26 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                                             collectionIndex={index}
                                         />
                                     )}
-                                    <TreeItem nodeId={`collection-${index}`} label={collection.info ? collection.info.name : collection.name} key={`${index}`}>
+                                    <TreeItem
+                                        nodeId={`collection-${index}`}
+                                        label={ isEditing ? (
+                                            <input
+                                                type="text"
+                                                value={newCollectionName}
+                                                onChange={(e) => setNewCollectionName(e.target.value)}
+                                                onBlur={() => finishEditing(`${index}`)}
+                                                autoFocus
+                                            />
+                                            ) :
+                                            (
+                                                <div
+                                                    onDoubleClick={() => startEditing(`${index}`)}
+                                                >
+                                                    {collection.info ? collection.info.name : collection.name}
+                                                </div>
+                                            )}
+
+                                        key={`${index}`}>
                                         {collection.isEmpty ? (
                                             <TreeItem
                                                 nodeId={`empty-${index}`}
