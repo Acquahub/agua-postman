@@ -35,7 +35,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         const updatedCollections = [...collections];
         const editedCollection = updatedCollections[index];
 
-        if(editedCollection.info) {
+        if (editedCollection.info) {
             editedCollection.info.name = newCollectionName;
         } else {
             editedCollection.name = newCollectionName;
@@ -94,6 +94,8 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         }
     };
 
+    console.log(collections);
+
     const getClonedItemToPerformAction = (action, id) => {
         // TODO: Es necesario chequear el action
         // Si action es addRequest y el elemento al que se le dio click es
@@ -106,18 +108,18 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         const l = idParts.length;
         let myObject = cloneCollections[idParts[0]];
         let lastFolder = myObject;
-        let duplicatedItem = {};
         for (let i = 1; i < l; i++) {
-             let item = myObject.item[idParts[i]];
+            let item = myObject.item[idParts[i]];
             console.log('item: ', item)
 
-            if(action === 'duplicate' && i === l - 1) {
-                 duplicatedItem = {...item};
-                lastFolder.item.push(duplicatedItem);
+            if (action === 'duplicate' && i === l - 1) {
+                // TODO: Change name
+                const duplicatedItemCopy = JSON.parse(JSON.stringify(item));
+                lastFolder.item.push(duplicatedItemCopy);
                 break;
             }
 
-            if(action === 'rename' || action=== 'delete' && i === l - 1) {
+            if (action === 'rename' || (action === 'delete' && i === l - 1)) {
                 return item;
             }
 
@@ -134,7 +136,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                 return lastFolder
             }
             case 'duplicate': {
-                return  lastFolder
+                return lastFolder
             }
             default: {
                 return myObject;
@@ -237,7 +239,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
 
     const handleDuplicate = () => {
 
-         const parentCollection = getClonedItemToPerformAction('duplicate', lastContextMenuId);
+        const parentCollection = getClonedItemToPerformAction('duplicate', lastContextMenuId);
 
 
     }
@@ -316,21 +318,21 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     const renderTreeItems = (items, parentIndex) => {
         return items.map((collection, index) => (
             <TreeItem nodeId={`${parentIndex}-${index}`}
-                      label={ isEditing  ? (
-                              <input
-                                  type="text"
-                                  value={newCollectionName}
-                                  onChange={(e) => setNewCollectionName(e.target.value)}
-                                  onBlur={() => finishEditing(`${parentIndex}-${index}`)}
-                                  autoFocus
-                              />
-                          ) :
-                          (
-                              <span onDoubleClick={() => startEditing(`${parentIndex}-${index}`)}
-                              >
-                                  {collection.info ? collection.info.name : collection.name}
-                              </span>
-                          )}
+                label={isEditing ? (
+                    <input
+                        type="text"
+                        value={newCollectionName}
+                        onChange={(e) => setNewCollectionName(e.target.value)}
+                        onBlur={() => finishEditing(`${parentIndex}-${index}`)}
+                        autoFocus
+                    />
+                ) :
+                    (
+                        <span onDoubleClick={() => startEditing(`${parentIndex}-${index}`)}
+                        >
+                            {collection.info ? collection.info.name : collection.name}
+                        </span>
+                    )}
                 key={`${parentIndex}-${index}`} onContextMenu={(e) => handleRightClick(e, `${parentIndex}-${index}`)}
             >
                 {collection.item && collection.item.length > 0 && renderTreeItems(collection.item, `${parentIndex}-${index}`)}
@@ -384,7 +386,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                                     )}
                                     <TreeItem
                                         nodeId={`collection-${index}`}
-                                        label={ isEditing ? (
+                                        label={isEditing ? (
                                             <input
                                                 type="text"
                                                 value={newCollectionName}
@@ -392,7 +394,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                                                 onBlur={() => finishEditing(`${index}`)}
                                                 autoFocus
                                             />
-                                            ) :
+                                        ) :
                                             (
                                                 <div
                                                     onDoubleClick={() => startEditing(`${index}`)}
