@@ -108,10 +108,12 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         const l = idParts.length;
         let myObject = cloneCollections[idParts[0]];
         let lastFolder = myObject;
-        for (let i = 1; i < l; i++) {
-            let item = myObject.item[idParts[i]];
-            console.log('item: ', item)
 
+        let item;
+        let wasFoundInside = false;
+
+        for (let i = 1; i < l; i++) {
+            item = myObject.item[idParts[i]];
             if (action === 'duplicate' && i === l - 1) {
                 // TODO: Change name
                 const duplicatedItemCopy = JSON.parse(JSON.stringify(item));
@@ -120,13 +122,17 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
             }
 
             if (action === 'rename' || (action === 'delete' && i === l - 1)) {
-                return item;
+                wasFoundInside = true;
+                break;
             }
 
             if (item.request) break;
+
             myObject = myObject.item[idParts[i]];
             lastFolder = myObject;
         }
+
+        if (wasFoundInside && item) return item;
 
         switch (action) {
             case 'addRequest': {
@@ -259,11 +265,17 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     }
 
     const handleDelete = () => {
-        const index = getIndexFromContextMenuId(lastContextMenuId);
-
-        const newCollections = [...collections];
-        newCollections.splice(index, 1);
-        setCollections(newCollections);
+        if (lastContextMenuId.indexOf('-') !== -1) {
+            const parentId = lastContextMenuId.substring(0, lastContextMenuId.lastIndexOf('-'));
+            const childId = lastContextMenuId.substring(lastContextMenuId.lastIndexOf('-') + 1);
+            const parent = getClonedItemToPerformAction('delete', parentId);
+            delete parent.item[childId];
+        } else {
+            const index = getIndexFromContextMenuId(lastContextMenuId);
+            const newCollections = [...collections];
+            newCollections.splice(index, 1);
+            setCollections(newCollections);
+        }
     }
 
     // ----------------------------------------------------------------------------------------
