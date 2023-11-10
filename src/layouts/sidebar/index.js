@@ -1,14 +1,14 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap/dist/js/bootstrap.min.js"
 import styles from "./sidebar.module.css";
-import { useState, useEffect, useRef } from "react";
+import {useEffect, useRef, useState} from "react";
 import ContextMenu from "../contextMenu";
 
 import Box from '@mui/material/Box';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { TreeView } from '@mui/x-tree-view/TreeView';
-import { TreeItem } from '@mui/x-tree-view/TreeItem';
+import {TreeView} from '@mui/x-tree-view/TreeView';
+import {TreeItem} from '@mui/x-tree-view/TreeItem';
 
 
 export default function Sidebar({ isOpen, toggleSidebar }) {
@@ -59,7 +59,6 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
 
         const updatedCollections = [...collections, newCollection];
         setCollections(updatedCollections);
-        console.log(collections);
     };
 
     const addCollectionItem = (index, newItem) => {
@@ -68,7 +67,6 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
 
     const handleImport = () => {
         fileInputRef.current.click();
-        console.log(collections);
     }
 
     // Upload file ----------------------------------------------------------------------------
@@ -94,15 +92,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         }
     };
 
-    console.log(collections);
-
     const getClonedItemToPerformAction = (action, id) => {
-        // TODO: Es necesario chequear el action
-        // Si action es addRequest y el elemento al que se le dio click es
-        // un request, entonces el nuevo request debe ser agregado en el padre, es decir,
-        // no se debe retornar el elemento al que se le dio click, sino su padre.
-        // Por otro lado, si es un rename, si se debe retornar siempre el elemento
-        // al que se le dio click.
         const cloneCollections = [...collections];
         const idParts = id.split('-');
         const l = idParts.length;
@@ -114,14 +104,15 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
 
         for (let i = 1; i < l; i++) {
             item = myObject.item[idParts[i]];
+
             if (action === 'duplicate' && i === l - 1) {
-                // TODO: Change name
                 const duplicatedItemCopy = JSON.parse(JSON.stringify(item));
+                duplicatedItemCopy.name = duplicatedItemCopy.name + '-copy';
                 lastFolder.item.push(duplicatedItemCopy);
                 break;
             }
 
-            if (action === 'rename' || (action === 'delete' && i === l - 1)) {
+            if ((action === 'rename' || action === 'delete') && i === l - 1) {
                 wasFoundInside = true;
                 break;
             }
@@ -133,6 +124,13 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         }
 
         if (wasFoundInside && item) return item;
+
+        if(l <= 1 && action === 'duplicate') {
+            const duplicatedCollectionCopy = JSON.parse(JSON.stringify(myObject));
+            duplicatedCollectionCopy.info.name = duplicatedCollectionCopy.info.name + '-copy';
+            duplicatedCollectionCopy.info.id = collections.length + 1;
+            collections.push(duplicatedCollectionCopy);
+        }
 
         switch (action) {
             case 'addRequest': {
@@ -148,10 +146,6 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                 return myObject;
             }
         }
-    }
-
-    const setItemOnClonedCollections = (id, item) => {
-
     }
 
     const getIndexFromContextMenuId = (contextMenuId) => {
@@ -185,8 +179,6 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
             response: [],
         };
 
-        console.log('updatedCollection: ', updatedCollection)
-
         updatedCollection.item.push(newItem);
         updatedCollection.isEmpty = false;
     };
@@ -204,11 +196,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         const newFolder = {
             name: 'New Folder',
             isEmpty: true,
-            item: [
-                {
-                    name: 'This folder is empty',
-                }
-            ],
+            item: [],
             description: '',
         };
 
@@ -347,7 +335,13 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                     )}
                 key={`${parentIndex}-${index}`} onContextMenu={(e) => handleRightClick(e, `${parentIndex}-${index}`)}
             >
-                {collection.item && collection.item.length > 0 && renderTreeItems(collection.item, `${parentIndex}-${index}`)}
+                {collection.isEmpty ? (
+                    <TreeItem
+                        nodeId={`empty-${index}`}
+                        label="This folder is empty"
+                    />
+                ) : collection.item && collection.item.length > 0 && renderTreeItems(collection.item, `${parentIndex}-${index}`)}
+
             </TreeItem>
         ));
     };
@@ -421,8 +415,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                                                 nodeId={`empty-${index}`}
                                                 label="This collection is empty"
                                             />
-                                        ) : null}
-                                        {collection.item && collection.item.length > 0 && renderTreeItems(collection.item, `${index}`)}
+                                        ) : collection.item && collection.item.length > 0 && renderTreeItems(collection.item, `${index}`)}
                                     </TreeItem>
                                 </div>
                             ))}
