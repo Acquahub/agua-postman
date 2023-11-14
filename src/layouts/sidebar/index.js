@@ -21,29 +21,53 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     const [lastContextMenuId, setLastContextMenuId] = useState('');
 
     // States to rename a collection
-    const [isEditing, setIsEditing] = useState(false);
+    const [isEditing, setIsEditing] = useState({});
     const [newCollectionName, setNewCollectionName] = useState('');
     const [editingIndex, setEditingIndex] = useState(null);
 
+    // States to search a collection
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredCollections, setFilteredCollections] = useState([]);
+
     const startEditing = (index) => {
-        setIsEditing(true);
-        setEditingIndex(index);
-        setNewCollectionName(collections[index].info.name);
+        setIsEditing((prevEditingStates) => ({
+            ...prevEditingStates,
+            [index]: true,
+
+        }))
+        if (index.indexOf('-') !== -1) {
+            const parentId = index.substring(0, index.lastIndexOf('-'));
+            const childId = index.substring(index.lastIndexOf('-') + 1);
+            const parent = getClonedItemToPerformAction('rename', parentId);
+            setEditingIndex(childId)
+
+            setNewCollectionName(parent.item[childId].name)
+        } else {
+            setEditingIndex(index);
+            setNewCollectionName(collections[index].info.name);
+        }
     }
 
     const finishEditing = (index) => {
-        const updatedCollections = [...collections];
-        const editedCollection = updatedCollections[index];
 
-        if (editedCollection.info) {
-            editedCollection.info.name = newCollectionName;
+        setIsEditing((prevEditingStates) => ({
+            ...prevEditingStates,
+            [index]: false,
+        }));
+
+        if (index.indexOf('-') !== -1) {
+            const parentId = index.substring(0, index.lastIndexOf('-'));
+            const parent = getClonedItemToPerformAction('rename', parentId);
+            parent.item[editingIndex].name = newCollectionName;
+
         } else {
-            editedCollection.name = newCollectionName;
+            const updatedCollections = [...collections];
+            const editedCollection = updatedCollections[index];
+            editedCollection.info.name = newCollectionName;
+
+            setCollections(updatedCollections);
         }
 
-        setCollections(updatedCollections);
-
-        setIsEditing(false);
         setEditingIndex(null);
     }
 
@@ -129,7 +153,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
             const duplicatedCollectionCopy = JSON.parse(JSON.stringify(myObject));
             duplicatedCollectionCopy.info.name = duplicatedCollectionCopy.info.name + '-copy';
             duplicatedCollectionCopy.info.id = collections.length + 1;
-            collections.push(duplicatedCollectionCopy);
+            setCollections([...collections, duplicatedCollectionCopy]);
         }
 
         switch (action) {
@@ -208,34 +232,26 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
 
 
     const handleRename = () => {
+        startEditing(lastContextMenuId)
 
-        const updatedElement = getClonedItemToPerformAction('rename', lastContextMenuId);
-
-
+        /*const updatedElement = getClonedItemToPerformAction('rename', lastContextMenuId);
         const isRequest = updatedElement.hasOwnProperty('request');
 
 
         const newName = prompt(`Enter a new name for the ${isRequest ? 'request' : 'folder'}`, updatedElement.name);
-
         if (newName !== null) {
-
             if (isRequest) {
                 updatedElement.name = newName;
             } else {
                 updatedElement.info ? updatedElement.info.name = newName : updatedElement.name = newName;
             }
-
-
             setCollections([...collections]);
-        }
+        }*/
     };
 
 
     const handleDuplicate = () => {
-
-        const parentCollection = getClonedItemToPerformAction('duplicate', lastContextMenuId);
-
-
+        getClonedItemToPerformAction('duplicate', lastContextMenuId);
     }
 
     const handleExport = () => {
@@ -315,10 +331,18 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         }
     }, [showContextMenu]);
 
+
+    useEffect(() => {
+        const filtered = collections.filter((collection) =>
+            collection.info.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setFilteredCollections(filtered);
+    }, [collections, searchTerm]);
+
     const renderTreeItems = (items, parentIndex) => {
         return items.map((collection, index) => (
             <TreeItem nodeId={`${parentIndex}-${index}`}
-                label={isEditing ? (
+                label={isEditing[`${parentIndex}-${index}`] ? (
                     <input
                         type="text"
                         value={newCollectionName}
@@ -368,7 +392,13 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
 
                 <div className={`pb-4 px-2 pb-2 d-flex justify-between align-content-center ${isOpen ? '' : 'd-none'}`}>
                     <button className={styles['add-button']} onClick={handleAddCollection}></button>
-                    <input type="text" className={styles['search-bar']} placeholder="search collections" />
+                    <input
+                        type="text"
+                        className={styles['search-bar']}
+                        placeholder="search..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
                 </div>
 
                 <div className={`flex-grow-1 overflow-auto ${isOpen ? '' : 'd-none'}`}>
@@ -379,7 +409,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                             defaultCollapseIcon={<ExpandMoreIcon />}
                             defaultExpandIcon={<ChevronRightIcon />}
                         >
-                            {collections.map((collection, index) => (
+                            {filteredCollections.map((collection, index) => (
                                 <div key={collection.info.id} className={styles['collection']} data-bs-theme="dark" onContextMenu={(e) => handleRightClick(e, `${index}`)}>
                                     {showContextMenu && (
                                         <ContextMenu
@@ -392,7 +422,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                                     )}
                                     <TreeItem
                                         nodeId={`collection-${index}`}
-                                        label={isEditing ? (
+                                        label={isEditing[`${index}`] ? (
                                             <input
                                                 type="text"
                                                 value={newCollectionName}
@@ -402,8 +432,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                                             />
                                         ) :
                                             (
-                                                <div
-                                                    onDoubleClick={() => startEditing(`${index}`)}
+                                                <div onDoubleClick={() => startEditing(`${index}`)}
                                                 >
                                                     {collection.info ? collection.info.name : collection.name}
                                                 </div>
