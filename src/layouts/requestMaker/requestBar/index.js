@@ -1,11 +1,11 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap/dist/js/bootstrap.min.js"
 
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import styles from "./requestBar.module.css";
 import Select from "react-select";
 
-export default function RequestBar({ userInputCallback }) {
+export default function RequestBar({ userInputCallback, selectedRequest }) {
   const [inputValue, setInputValue] = useState('');
   const [selectedOption, setSelectedOption] = useState(null);
 
@@ -19,11 +19,11 @@ export default function RequestBar({ userInputCallback }) {
   }
 
   const options = [
-    { value: "GET",    label: "GET",    color: "green" },
-    { value: "POST",   label: "POST",   color: "blue" },
-    { value: "PUT",    label: "PUT",    color: "red" },
-    { value: "DELETE", label: "DELETE", color: "purple" },
-    { value: "PATCH",  label: "PATCH",  color: "orange" },
+    { value: "GET",    label: "GET",    color: "var(--content-color-success)" },
+    { value: "POST",   label: "POST",   color: "var(--content-color-warning)" },
+    { value: "PUT",    label: "PUT",    color: "var(--content-color-info)" },
+    { value: "PATCH",  label: "PATCH",  color: "var(--content-color-patch-method)" },
+    { value: "DELETE", label: "DELETE", color: "var(--content-color-error)" },
   ];
 
   const customStyles = {
@@ -55,6 +55,23 @@ export default function RequestBar({ userInputCallback }) {
   const getOptionLabel = (option) => (
     <div style={{ color: option.color }}>{option.label}</div>
   );
+
+  useEffect(() => {
+    // Actualizar el estado local con la información del request seleccionado
+    if (selectedRequest && selectedRequest.request) {
+      setInputValue(selectedRequest.request.url.raw);
+
+      // Buscar la opción correspondiente al método y obtener su color
+      const selectedMethod = selectedRequest.request.method;
+      const selectedOptionWithColor = options.find(option => option.value === selectedMethod);
+
+      if(!selectedOption || selectedOption.value !== selectedMethod) {
+        setSelectedOption(selectedOptionWithColor || null);
+      }
+    }
+  }, [selectedRequest]);
+
+  console.log(selectedOption);
 
   return (
     <div className="container-fluid d-flex align-items-center">

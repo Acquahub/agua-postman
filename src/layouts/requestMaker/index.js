@@ -8,24 +8,25 @@ import BodyTab from "./tabs/bodyTab";
 import RequestTitle from "../../components/requestMaker/requestTitle";
 import RequestBar from "./requestBar";
 import RequestURLInput from "../../components/requestMaker/requestURLInput";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 
-const tabs = [
-  {
-    name: 'Params',
-    element: <ParamsTab />
-  },
-  {
-    name: 'Headers',
-    element: <HeadersTab />
-  },
-  {
-    name: 'Body',
-    element: <BodyTab />
-  }
-];
+export default function RequestMaker({selectedRequest}) {
 
-export default function RequestMaker() {
+
+  const tabs = [
+    {
+      name: 'Params',
+      element: <ParamsTab selectedRequest={selectedRequest} />
+    },
+    {
+      name: 'Headers',
+      element: <HeadersTab selectedRequest={selectedRequest}  />
+    },
+    {
+      name: 'Body',
+      element: <BodyTab />
+    }
+  ];
 
   const [userInput, setUserInput] = useState('');
 
@@ -36,8 +37,8 @@ export default function RequestMaker() {
   return (
     <div className={styles['container']}>
       <RequestURLInput userInput={userInput} />
-      <RequestTitle userInput={userInput} />
-      <RequestBar userInputCallback={getUserInput} />
+      <RequestTitle userInput={userInput} selectedRequest={selectedRequest} />
+      <RequestBar selectedRequest={selectedRequest} userInputCallback={getUserInput} />
       <Tabs tabs={tabs} />
     </div>
   );

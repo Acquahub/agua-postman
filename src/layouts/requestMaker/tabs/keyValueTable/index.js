@@ -3,16 +3,29 @@ import "bootstrap/dist/js/bootstrap.min.js"
 import "bootstrap-icons/font/bootstrap-icons.css"
 
 import styles from "./keyValueTable.module.css";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 
-export default function KeyValueTable() {
-  const [rows, setRows] = useState([
-    {
+export default function KeyValueTable({headerItem}) {
+
+  const [rows, setRows] = useState([]);
+
+  useEffect(() => {
+    if(headerItem && headerItem.length > 0){
+      setRows([...headerItem, getEmptyRow()]);
+    } else {
+      setRows([getEmptyRow()])
+    }
+
+  } , [headerItem])
+
+  function getEmptyRow() {
+    return {
       key: "",
       value: "",
       description: "",
-    },
-  ]);
+      type: ""
+    };
+  }
 
   function handleInputChange(index, event, field) {
     const newRows = [...rows];
