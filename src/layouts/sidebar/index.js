@@ -11,8 +11,10 @@ import {TreeView} from '@mui/x-tree-view/TreeView';
 import {TreeItem} from '@mui/x-tree-view/TreeItem';
 
 
-export default function Sidebar({ isOpen, toggleSidebar }) {
-    const [collections, setCollections] = useState([]);
+export default function Sidebar({ collections, setCollections, setSelectedRequest, isOpen, toggleSidebar }) {
+
+
+
 
     // States for context menu
     const [showContextMenu, setShowContextMenu] = useState(false);
@@ -339,9 +341,18 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         setFilteredCollections(filtered);
     }, [collections, searchTerm]);
 
+    const getSelectedRequest = (collection, index) => {
+
+        console.log('collection: ', collection)
+        console.log('index: ', index)
+        setSelectedRequest(collection, index)
+
+    }
+
     const renderTreeItems = (items, parentIndex) => {
         return items.map((collection, index) => (
             <TreeItem nodeId={`${parentIndex}-${index}`}
+                      onClick={() => getSelectedRequest(collection, `${parentIndex}-${index}` )}
                 label={isEditing[`${parentIndex}-${index}`] ? (
                     <input
                         type="text"

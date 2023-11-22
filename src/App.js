@@ -7,7 +7,11 @@ import { useState } from "react";
 import ContextMenu from './layouts/contextMenu';
 
 function App() {
-  const [isOpen, setIsOpen] = useState(true);
+    const [collections, setCollections] = useState([]);
+    const [selectedRequest, setSelectedRequest] = useState([]);
+    const [isOpen, setIsOpen] = useState(true);
+
+    console.log(selectedRequest)
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -15,12 +19,12 @@ function App() {
 
   return (
     <div className={`${isOpen ? 'containerLayout-packed' : 'containerLayout-expanded'}`}>
-      <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
+      <Sidebar collections={collections} setCollections={setCollections} isOpen={isOpen} toggleSidebar={toggleSidebar} setSelectedRequest={setSelectedRequest} />
 
       <div className="containerMainView">
-          <Nav />
-          {/* <RequestMaker />
-          <Response /> */}
+          {/*<Nav />*/}
+           <RequestMaker  selectedRequest={selectedRequest}/>
+          <Response />
       </div>
       
     </div>
