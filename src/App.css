@@ -26,6 +26,13 @@ body,
   --sidebar-open-width: 260px;
   --highlight-text-color: #097bed;
 
+  --content-color-success: #6BDD9A;
+  --content-color-warning: #FFE47E;
+  --content-color-info: #74AEF6;
+  --content-color-patch-method: #C0A8E1;
+  --content-color-error: #F79A8E;
+  --http-icon-color: #3FD6E6;
+
   --tab-height: 30px;
 }
 
