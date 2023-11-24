@@ -1,14 +1,39 @@
 import React, {useEffect, useState} from "react";
 import styles from "./requestTitle.module.css";
 
-export default function RequestTitle({ userInput, selectedRequest }) {
+export default function RequestTitle({ userInput, selectedRequest, setSelectedRequest, idItem, getClonedItemToPerformAction}) {
 
     const [requestTitle, setRequestTitle] = useState('');
+    const [isEditing, setIsEditing] = useState(false);
+
+    const startEditing = () => {
+        setIsEditing(true);
+
+    }
+
+    const finishEditing = () => {
+        setIsEditing(false);
+        const clonedRequest = JSON.parse(JSON.stringify(selectedRequest));
+
+        if (clonedRequest.request) {
+            clonedRequest.name= requestTitle;
+            setSelectedRequest(clonedRequest);
+        }
+
+        const parentId = idItem.substring(0, idItem.lastIndexOf('-'));
+        const childId = idItem.substring(idItem.lastIndexOf('-') + 1);
+        const parent = getClonedItemToPerformAction('update', parentId);
+        parent.item[childId].name = requestTitle;
+    }
+
+    const handleInputChange = (e) => {
+        setRequestTitle(e.target.value);
+    };
 
     useEffect(() => {
         if (selectedRequest && selectedRequest.request) {
 
-            setRequestTitle(`/ ${selectedRequest.name}`);
+            setRequestTitle(`${selectedRequest.name}`);
         } else {
 
             setRequestTitle(userInput || selectedRequest?.item?.name || "Untitled Collection");
@@ -33,7 +58,17 @@ export default function RequestTitle({ userInput, selectedRequest }) {
           </div>
 
         <div className={styles['titulo']}>
-            {requestTitle}
+            {isEditing ? (
+                <input
+                    type="text"
+                    value={requestTitle}
+                    onChange={handleInputChange}
+                    onBlur={finishEditing}
+                    autoFocus
+                />
+            ) : (
+                <div onDoubleClick={startEditing}>{requestTitle}</div>
+            )}
         </div>
       </label>
     </div>

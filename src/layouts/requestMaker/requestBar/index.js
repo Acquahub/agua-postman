@@ -5,13 +5,12 @@ import React, {useEffect, useState} from "react";
 import styles from "./requestBar.module.css";
 import Select from "react-select";
 
-export default function RequestBar({ userInputCallback, selectedRequest }) {
+export default function RequestBar({ setUserInput, selectedOption, setSelectedOption, selectedRequest }) {
   const [inputValue, setInputValue] = useState('');
-  const [selectedOption, setSelectedOption] = useState(null);
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
-    userInputCallback(event.target.value);
+    setUserInput(event.target.value);
   }
 
   const handleSelectChange = (selectedOption) => {
@@ -70,8 +69,6 @@ export default function RequestBar({ userInputCallback, selectedRequest }) {
       }
     }
   }, [selectedRequest]);
-
-  console.log(selectedOption);
 
   return (
     <div className="container-fluid d-flex align-items-center">

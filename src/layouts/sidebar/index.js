@@ -11,11 +11,7 @@ import {TreeView} from '@mui/x-tree-view/TreeView';
 import {TreeItem} from '@mui/x-tree-view/TreeItem';
 
 
-export default function Sidebar({ collections, setCollections, setSelectedRequest, isOpen, toggleSidebar }) {
-
-
-
-
+export default function Sidebar({ collections, setCollections, setSelectedRequest, isOpen, toggleSidebar, getClonedItemToPerformAction, setIdItem }) {
     // States for context menu
     const [showContextMenu, setShowContextMenu] = useState(false);
     const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
@@ -118,61 +114,7 @@ export default function Sidebar({ collections, setCollections, setSelectedReques
         }
     };
 
-    const getClonedItemToPerformAction = (action, id) => {
-        const cloneCollections = [...collections];
-        const idParts = id.split('-');
-        const l = idParts.length;
-        let myObject = cloneCollections[idParts[0]];
-        let lastFolder = myObject;
 
-        let item;
-        let wasFoundInside = false;
-
-        for (let i = 1; i < l; i++) {
-            item = myObject.item[idParts[i]];
-
-            if (action === 'duplicate' && i === l - 1) {
-                const duplicatedItemCopy = JSON.parse(JSON.stringify(item));
-                duplicatedItemCopy.name = duplicatedItemCopy.name + '-copy';
-                lastFolder.item.push(duplicatedItemCopy);
-                break;
-            }
-
-            if ((action === 'rename' || action === 'delete') && i === l - 1) {
-                wasFoundInside = true;
-                break;
-            }
-
-            if (item.request) break;
-
-            myObject = myObject.item[idParts[i]];
-            lastFolder = myObject;
-        }
-
-        if (wasFoundInside && item) return item;
-
-        if(l <= 1 && action === 'duplicate') {
-            const duplicatedCollectionCopy = JSON.parse(JSON.stringify(myObject));
-            duplicatedCollectionCopy.info.name = duplicatedCollectionCopy.info.name + '-copy';
-            duplicatedCollectionCopy.info.id = collections.length + 1;
-            setCollections([...collections, duplicatedCollectionCopy]);
-        }
-
-        switch (action) {
-            case 'addRequest': {
-                return lastFolder
-            }
-            case 'addFolder': {
-                return lastFolder
-            }
-            case 'duplicate': {
-                return lastFolder
-            }
-            default: {
-                return myObject;
-            }
-        }
-    }
 
     const getIndexFromContextMenuId = (contextMenuId) => {
         const idParts = contextMenuId.split('-');
@@ -345,7 +287,8 @@ export default function Sidebar({ collections, setCollections, setSelectedReques
 
         console.log('collection: ', collection)
         console.log('index: ', index)
-        setSelectedRequest(collection, index)
+        setSelectedRequest(collection)
+        setIdItem(index)
 
     }
 
