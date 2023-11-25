@@ -18,12 +18,14 @@ export default function RequestTitle({ userInput, selectedRequest, setSelectedRe
         if (clonedRequest.request) {
             clonedRequest.name= requestTitle;
             setSelectedRequest(clonedRequest);
+
+            const parentId = idItem.substring(0, idItem.lastIndexOf('-'));
+            const childId = idItem.substring(idItem.lastIndexOf('-') + 1);
+            const parent = getClonedItemToPerformAction('update', parentId);
+            parent.item[childId].name = requestTitle;
         }
 
-        const parentId = idItem.substring(0, idItem.lastIndexOf('-'));
-        const childId = idItem.substring(idItem.lastIndexOf('-') + 1);
-        const parent = getClonedItemToPerformAction('update', parentId);
-        parent.item[childId].name = requestTitle;
+
     }
 
     const handleInputChange = (e) => {
@@ -65,6 +67,7 @@ export default function RequestTitle({ userInput, selectedRequest, setSelectedRe
                     onChange={handleInputChange}
                     onBlur={finishEditing}
                     autoFocus
+                    className={styles['input']}
                 />
             ) : (
                 <div onDoubleClick={startEditing}>{requestTitle}</div>
