@@ -18,12 +18,19 @@
 }
 .label{
   display: flex;
+  height: fit-content;
   width: 90%;
   border: solid 1px var(--border-color);
   margin: 20px;
   margin-right: 10px;
   border-radius: 5px;
-  padding: 2px;
+}
+
+.button{
+  font-size: 13px;
+  font-weight: bold;
+  padding: 10px 20px;
+
 }
 
 .select{

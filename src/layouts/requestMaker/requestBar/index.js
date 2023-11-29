@@ -55,6 +55,14 @@ export default function RequestBar({ setUserInput, selectedOption, setSelectedOp
     <div style={{ color: option.color }}>{option.label}</div>
   );
 
+
+  useEffect(() => {
+    if (!selectedOption) {
+      setSelectedOption(options[0]);
+    }
+  }, []);
+
+
   useEffect(() => {
     // Actualizar el estado local con la información del request seleccionado
     if (selectedRequest && selectedRequest.request) {
@@ -94,7 +102,7 @@ export default function RequestBar({ setUserInput, selectedOption, setSelectedOp
 
       </label>
       <span>
-        <button type="button" style={{ fontSize: '13px', fontWeight: 'bold' }} className="btn btn-primary px-5 py-3">
+        <button type="button" className={`btn btn-primary ${styles.button}`}>
             Send
         </button>
       </span>
