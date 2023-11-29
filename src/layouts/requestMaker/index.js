@@ -9,14 +9,54 @@ import RequestTitle from "../../components/requestMaker/requestTitle";
 import RequestBar from "./requestBar";
 import RequestURLInput from "../../components/requestMaker/requestURLInput";
 import React, {useEffect, useState} from "react";
+import {ModalAlert} from "../../components/modalAlert";
 
 export default function   RequestMaker({selectedRequest, setSelectedRequest, idItem, getClonedItemToPerformAction}) {
 
+    const [show, setShow] = useState(false);
+
+  // requestBar
   const [userInput, setUserInput] = useState('');
   const [selectedOption, setSelectedOption] = useState(null);
 
-  console.log('selectedOption', selectedOption )
-  console.log('userInput', userInput)
+
+  // requestTabs
+  const [rows, setRows] = useState([]);
+
+
+
+
+    const handleSave = () => {
+        debugger
+
+        const rowsWithData = rows.filter((row) => row.key !== '');
+
+          if( selectedRequest.request) {
+              const parentId = idItem.substring(0, idItem.lastIndexOf('-'));
+              const childId = idItem.substring(idItem.lastIndexOf('-') + 1);
+              const parent = getClonedItemToPerformAction('update', parentId);
+
+              if(parent.item[childId].request) {
+                  parent.item[childId].request.method = selectedOption ? selectedOption.value : 'GET';
+                  parent.item[childId].request.url.raw = userInput;
+
+                    if(rowsWithData.length > 0) {
+                        parent.item[childId].request.header = rowsWithData;
+                    }
+
+
+
+              }
+          } else {
+
+            setShow(true);
+
+          }
+
+
+
+
+    }
 
   const tabs = [
     {
@@ -25,7 +65,7 @@ export default function   RequestMaker({selectedRequest, setSelectedRequest, idI
     },
     {
       name: 'Headers',
-      element: <HeadersTab selectedRequest={selectedRequest}  />
+      element: <HeadersTab selectedRequest={selectedRequest} rows={rows} setRows={setRows}  />
     },
     {
       name: 'Body',
@@ -43,8 +83,8 @@ export default function   RequestMaker({selectedRequest, setSelectedRequest, idI
       <RequestURLInput userInput={userInput}
       />
 
-      <div className="d-flex align-items-center">
-        <div  className="me-5">
+      <div className="d-flex align-items-center justify-content-between">
+        <div>
           <RequestTitle userInput={userInput}
                         selectedRequest={selectedRequest}
                         setSelectedRequest={setSelectedRequest}
@@ -52,9 +92,10 @@ export default function   RequestMaker({selectedRequest, setSelectedRequest, idI
                         getClonedItemToPerformAction={getClonedItemToPerformAction}
           />
         </div>
-        <div>
-          <button type="button" className="btn btn-outline-warning">
-            Save
+        <div style={{marginRight: '9vw'}}>
+          <button type="button" className={styles.send_button} onClick={handleSave}>
+              <i className="bi bi-floppy ms"></i>
+              <span className="ms-1">Save</span>
           </button>
         </div>
       </div>
@@ -64,12 +105,16 @@ export default function   RequestMaker({selectedRequest, setSelectedRequest, idI
                   selectedOption={selectedOption}
                   setSelectedOption={setSelectedOption}
                   setSelectedRequest={setSelectedRequest}
-                  idItem={idItem}
-                  getClonedItemToPerformAction={getClonedItemToPerformAction}
       />
 
       <Tabs tabs={tabs}
       />
+
+        <ModalAlert title="Error"
+                    content="You must select a request"
+                    show={show}
+                    setShow={setShow}
+        />
     </div>
   );
 }

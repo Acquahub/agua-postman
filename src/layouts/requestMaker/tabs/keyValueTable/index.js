@@ -5,9 +5,7 @@ import "bootstrap-icons/font/bootstrap-icons.css"
 import styles from "./keyValueTable.module.css";
 import {useEffect, useState} from "react";
 
-export default function KeyValueTable({headerItem}) {
-
-  const [rows, setRows] = useState([]);
+export default function KeyValueTable({headerItem, rows, setRows}) {
 
   useEffect(() => {
     if(headerItem && headerItem.length > 0){

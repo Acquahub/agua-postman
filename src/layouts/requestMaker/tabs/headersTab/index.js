@@ -1,7 +1,7 @@
 import KeyValueTable from "../keyValueTable"
 import {useEffect, useState} from "react";
 
-export default function HeadersTab({ selectedRequest }) {
+export default function HeadersTab({ selectedRequest, rows, setRows }) {
 
     const [headerItem, setHeaderItem] = useState([]);
 
@@ -17,7 +17,7 @@ export default function HeadersTab({ selectedRequest }) {
   return (
     <div className="container-fluid m-3">
       <p>Headers</p>
-      <KeyValueTable headerItem={headerItem} />
+      <KeyValueTable headerItem={headerItem} rows={rows} setRows={setRows}/>
     </div>
   );
 }
