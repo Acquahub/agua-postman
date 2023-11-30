@@ -51,7 +51,6 @@ export default function KeyValueTable({headerItem, rows, setRows}) {
       <table className={styles['tabla']}>
         <thead>
           <tr>
-            <th></th>
             <th>Key</th>
             <th>Value</th>
             <th>Description</th>
@@ -61,7 +60,6 @@ export default function KeyValueTable({headerItem, rows, setRows}) {
         <tbody>
           {rows.map((row, index) => (
             <tr key={index}>
-              <td><input className="form-check-input" type="checkbox" value=""/></td>
               <td>
                 <div className={styles['input-wrapper']}>
                   <input
@@ -69,6 +67,7 @@ export default function KeyValueTable({headerItem, rows, setRows}) {
                     placeholder="Key"
                     value={row.key}
                     onInput={(e) => handleInputChange(index, e, "key")}
+                    required
                   />
                 </div>
               </td>
@@ -79,6 +78,7 @@ export default function KeyValueTable({headerItem, rows, setRows}) {
                     placeholder="Value"
                     value={row.value}
                     onInput={(e) => handleInputChange(index, e, "value")}
+                    required
                   />
                 </div>
               </td>
