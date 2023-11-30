@@ -10,24 +10,49 @@ import RequestBar from "./requestBar";
 import RequestURLInput from "../../components/requestMaker/requestURLInput";
 import React, {useEffect, useState} from "react";
 import {ModalAlert} from "../../components/modalAlert";
+import {forEach} from "react-bootstrap/ElementChildren";
 
 export default function   RequestMaker({selectedRequest, setSelectedRequest, idItem, getClonedItemToPerformAction}) {
 
     const [show, setShow] = useState(false);
 
   // requestBar
-  const [userInput, setUserInput] = useState('');
-  const [selectedOption, setSelectedOption] = useState(null);
-
+    const [userInput, setUserInput] = useState('');
+    const [selectedOption, setSelectedOption] = useState(null);
 
   // requestTabs
-  const [rows, setRows] = useState([]);
+    const [rows, setRows] = useState([]);
+
+        let urlWithPrefix = '';
+
+    if(userInput.startsWith('http://') || userInput.startsWith('https://')) {
+        urlWithPrefix = userInput;
+    } else {
+         urlWithPrefix = 'http://' + userInput;
+    }
+
+   try {
+
+       const urlObject = new URL(urlWithPrefix);
+
+       const hostname = urlObject.hostname;
+       const port =  urlObject.port;
+       const pathname = urlObject.pathname;
+       const path = pathname.split('/').filter((part) => part !== '');
+
+       console.log(hostname)
+       console.log(port)
+       console.log(path)
+
+   } catch (e) {
+         console.log(e)
+   }
+
 
 
 
 
     const handleSave = () => {
-        debugger
 
         const rowsWithData = rows.filter((row) => row.key !== '');
 
@@ -40,17 +65,10 @@ export default function   RequestMaker({selectedRequest, setSelectedRequest, idI
                   parent.item[childId].request.method = selectedOption ? selectedOption.value : 'GET';
                   parent.item[childId].request.url.raw = userInput;
 
-                    if(rowsWithData.length > 0) {
-                        parent.item[childId].request.header = rowsWithData;
-                    }
-
-
-
+                    if(rowsWithData.length > 0)  parent.item[childId].request.header = rowsWithData;
               }
           } else {
-
             setShow(true);
-
           }
 
 
