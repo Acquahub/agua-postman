@@ -23,55 +23,51 @@ export default function   RequestMaker({selectedRequest, setSelectedRequest, idI
   // requestTabs
     const [rows, setRows] = useState([]);
 
-        let urlWithPrefix = '';
-
-    if(userInput.startsWith('http://') || userInput.startsWith('https://')) {
-        urlWithPrefix = userInput;
-    } else {
-         urlWithPrefix = 'http://' + userInput;
-    }
-
-   try {
-
-       const urlObject = new URL(urlWithPrefix);
-
-       const hostname = urlObject.hostname;
-       const port =  urlObject.port;
-       const pathname = urlObject.pathname;
-       const path = pathname.split('/').filter((part) => part !== '');
-
-       console.log(hostname)
-       console.log(port)
-       console.log(path)
-
-   } catch (e) {
-         console.log(e)
-   }
-
-
-
-
 
     const handleSave = () => {
 
-        const rowsWithData = rows.filter((row) => row.key !== '');
+        let urlWithPrefix = '';
 
-          if( selectedRequest.request) {
-              const parentId = idItem.substring(0, idItem.lastIndexOf('-'));
-              const childId = idItem.substring(idItem.lastIndexOf('-') + 1);
-              const parent = getClonedItemToPerformAction('update', parentId);
+        if (userInput.startsWith('http://') || userInput.startsWith('https://')) {
+            urlWithPrefix = userInput;
+        } else {
+            urlWithPrefix = 'http://' + userInput;
+        }
 
-              if(parent.item[childId].request) {
-                  parent.item[childId].request.method = selectedOption ? selectedOption.value : 'GET';
-                  parent.item[childId].request.url.raw = userInput;
+        try {
 
-                    if(rowsWithData.length > 0)  parent.item[childId].request.header = rowsWithData;
-              }
-          } else {
-            setShow(true);
-          }
+            const urlObject = new URL(urlWithPrefix);
+
+            const hostname = urlObject.hostname;
+            const port = urlObject.port;
+            const pathname = urlObject.pathname;
+            const path = pathname.split('/').filter((part) => part !== '');
 
 
+            const rowsWithData = rows.filter((row) => row.key !== '');
+
+            if (selectedRequest.request) {
+                const parentId = idItem.substring(0, idItem.lastIndexOf('-'));
+                const childId = idItem.substring(idItem.lastIndexOf('-') + 1);
+                const parent = getClonedItemToPerformAction('update', parentId);
+
+                if (parent.item[childId].request) {
+                    parent.item[childId].request.method = selectedOption ? selectedOption.value : 'GET';
+                    parent.item[childId].request.url.raw = userInput;
+
+                    parent.item[childId].request.url.host = [hostname];
+                    parent.item[childId].request.url.port = port;
+                    parent.item[childId].request.url.path = path;
+
+                    if (rowsWithData.length > 0) parent.item[childId].request.header = rowsWithData;
+                }
+            } else {
+                setShow(true);
+            }
+
+        } catch (e) {
+            console.log(e)
+        }
 
 
     }
