@@ -5,9 +5,7 @@ import "bootstrap-icons/font/bootstrap-icons.css"
 import styles from "./keyValueTabParams.module.css";
 import {useEffect, useState} from "react";
 
-export default function KeyValueTabParams({paramsItem}) {
-
-    const [rows, setRows] = useState([]);
+export default function KeyValueTabParams({paramsItem, rows, setRows}) {
 
     useEffect(() => {
         if(paramsItem && paramsItem.length > 0){
@@ -53,7 +51,6 @@ export default function KeyValueTabParams({paramsItem}) {
             <table className={styles['tabla']}>
                 <thead>
                 <tr>
-                    <th></th>
                     <th>Key</th>
                     <th>Value</th>
                     <th>Description</th>
@@ -63,7 +60,6 @@ export default function KeyValueTabParams({paramsItem}) {
                 <tbody>
                 {rows.map((row, index) => (
                     <tr key={index}>
-                        <td><input className="form-check-input" type="checkbox" value=""/></td>
                         <td>
                             <div className={styles['input-wrapper']}>
                                 <input

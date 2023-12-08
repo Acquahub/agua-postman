@@ -21,10 +21,12 @@ export default function   RequestMaker({selectedRequest, setSelectedRequest, idI
     const [selectedOption, setSelectedOption] = useState(null);
 
   // requestTabs
-    const [rows, setRows] = useState([]);
+    const [rowsHeaders, setRowsHeaders] = useState([]);
+    const [rowsParams, setRowsParams] = useState([]);
 
 
     const handleSave = () => {
+        debugger
 
         let urlWithPrefix = '';
 
@@ -44,7 +46,8 @@ export default function   RequestMaker({selectedRequest, setSelectedRequest, idI
             const path = pathname.split('/').filter((part) => part !== '');
 
 
-            const rowsWithData = rows.filter((row) => row.key !== '');
+            const rowsWithHeader = rowsHeaders.filter((row) => row.key !== '');
+            const rowsWithParams = rowsParams.filter((row) => row.key !== '');
 
             if (selectedRequest.request) {
                 const parentId = idItem.substring(0, idItem.lastIndexOf('-'));
@@ -53,13 +56,20 @@ export default function   RequestMaker({selectedRequest, setSelectedRequest, idI
 
                 if (parent.item[childId].request) {
                     parent.item[childId].request.method = selectedOption ? selectedOption.value : 'GET';
-                    parent.item[childId].request.url.raw = userInput;
+
 
                     parent.item[childId].request.url.host = [hostname];
                     parent.item[childId].request.url.port = port;
                     parent.item[childId].request.url.path = path;
 
-                    if (rowsWithData.length > 0) parent.item[childId].request.header = rowsWithData;
+                    if (rowsWithHeader.length > 0) parent.item[childId].request.header = rowsWithHeader;
+                    if (rowsWithParams.length > 0) parent.item[childId].request.url.query = rowsWithParams;
+
+                    if(parent.item[childId].request.url.query.length > 0){
+                        console.log('parent.item[childId].request.url.query', parent.item[childId].request.url.query)
+                    } else {
+                        parent.item[childId].request.url.raw = userInput;
+                    }
                 }
             } else {
                 setShow(true);
@@ -75,11 +85,11 @@ export default function   RequestMaker({selectedRequest, setSelectedRequest, idI
   const tabs = [
     {
       name: 'Params',
-      element: <ParamsTab selectedRequest={selectedRequest} />
+      element: <ParamsTab selectedRequest={selectedRequest} rows={rowsParams} setRows={setRowsParams}/>
     },
     {
       name: 'Headers',
-      element: <HeadersTab selectedRequest={selectedRequest} rows={rows} setRows={setRows}  />
+      element: <HeadersTab selectedRequest={selectedRequest} rows={rowsHeaders} setRows={setRowsHeaders}/>
     },
     {
       name: 'Body',

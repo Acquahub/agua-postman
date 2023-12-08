@@ -4,7 +4,7 @@ import "bootstrap/dist/js/bootstrap.min.js"
 import KeyValueTable from "../keyValueTabParams"
 import {useEffect, useState} from "react";
 
-export default function ParamsTab({selectedRequest}) {
+export default function ParamsTab({selectedRequest, rows, setRows}) {
 
     const [paramsItem, setParamsItem] = useState([]);
 
@@ -20,7 +20,7 @@ export default function ParamsTab({selectedRequest}) {
 
     <div className="container-fluid m-3">
       <p>Query params</p>
-      <KeyValueTable paramsItem={paramsItem} />
+      <KeyValueTable paramsItem={paramsItem} rows={rows} setRows={setRows} />
     </div>
   );
 }
